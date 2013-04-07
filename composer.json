@@ -1,0 +1,12 @@
+{
+	"name": "yeap",
+	"description": "a mirco framework",
+	"autoload": {
+		"psr-0": {
+			"Yeap": "Yeap"
+		}
+	},
+	"require": {
+        "php": ">=5.3.3"
+    }
+}
