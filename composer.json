@@ -3,7 +3,7 @@
 	"description": "a mirco framework",
 	"autoload": {
 		"psr-0": {
-			"Yeap": "Yeap"
+			"Yeap": ""
 		}
 	},
 	"require": {
