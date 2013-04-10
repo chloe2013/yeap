@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Yeap' => $baseDir . '/',
+    'Twig_' => $vendorDir . '/twig/twig/lib/',
 );

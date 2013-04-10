@@ -3,10 +3,12 @@
 	"description": "a mirco framework",
 	"autoload": {
 		"psr-0": {
-			"Yeap": ""
+			"Yeap": "",
+			"tpl":"/vendor/tpl"
 		}
 	},
 	"require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        // "twig/twig": "1.*"
     }
 }
