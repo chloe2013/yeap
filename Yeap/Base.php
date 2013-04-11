@@ -20,21 +20,25 @@ use tpl\Template_;
 
 Class Base
 {
-    private $url = '/';
+    private $url 	= '/';
 	private $is_ajax = FALSE;
-	private $tpl = null;
+	private $tpl 	= null;
+	private $config = null;
+	private $db 	= null;
+	private $router = null;
     public function __construct()
 	{
 		$this->url = parse_url(getenv('REQUEST_URI'), PHP_URL_PATH);
 		$this->is_ajax = strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
+		$this->config = new Config('base');
 	}
 	
 	/**
-	 * 
+	 * 最终输出显示
 	 */
 	public function display()
 	{
-		
+		$this->_router();
 	}
 	
 	/**
@@ -45,12 +49,15 @@ Class Base
 		
 	}
 	
+	
+	
 	/**
 	 * 
 	 */
-	private function _route()
+	private function _router()
 	{
 		$path = trim($this->url, '/');
+		$this->router = new Router($path);
 		
 	}
 	

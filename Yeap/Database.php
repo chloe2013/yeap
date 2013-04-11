@@ -232,7 +232,7 @@ class Database
 	 * @param array $data row data
 	 * @return string
 	 */
-	public function insert_sql($table, $data)
+	public function insertSql($table, $data)
 	{
 		$i = $this->i;
 
@@ -350,7 +350,7 @@ class Database
 	 *
 	 * @param array $fields to order by
 	 */
-	public function order_by($fields = NULL)
+	public function orderBy($fields = NULL)
 	{
 		if( ! $fields) return;
 
