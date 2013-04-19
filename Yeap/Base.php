@@ -18,6 +18,8 @@ use Yeap\View;
 use Yeap\Exceptions;
 use tpl\Template_;
 
+define('DS', '/');
+
 Class Base
 {
     private $url 	= '/';
@@ -57,8 +59,7 @@ Class Base
 	private function _router()
 	{
 		$path = trim($this->url, '/');
-		$this->router = new Router($path);
-		
+		$this->router = new Router($path, $this->config);
 	}
 	
 	/**
