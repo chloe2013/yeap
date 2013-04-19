@@ -3,16 +3,18 @@
 namespace Yeap;
 
 use Yeap\Config;
+use \BadMethodCallException;
 
 Class Router
 {
+	const CTL_NAME = '__controller';	
 	private $param = array();
 	private $method = 'index';
 	private $controller = 'index';
-	private $path = '';
+	private $path = 'index/';
 	
 	/**	
-	 * 
+	 * 构造函数
 	 */
 	public function __construct($path = '', Config $config)
 	{
@@ -24,27 +26,24 @@ Class Router
 			$this->method = $config->default_method;
 		} else {
 			$path = strtolower(trim(urldecode($path), DS));
-			$dirs = explode(DS, $path);
+			$paths = explode(DS, $path);
+			var_dump($paths);
+			for($i = count($paths) - 1; $i >= 0; $i--) {
+				
+			}
 			// 循环路径
-			$tmp = 'controller';
-			foreach($dirs as $k => $v) {
-				$tmp .= $v . DS;
-				$controller = $dirs[$k];
-				$method = isset($dirs[$k+1]) ? $dirs[$k+1] : $config->default_method;
-				// check file
-				if( $controller && is_file(WEBPATH . DS . $tmp . $controller . EXT) ) {
-					$this->controller = $controller;
-					$this->method = $method;
-					$this->param = array_slice($paths, $k+1);
-					$this->path = $tmp;
-					break;
-				} else if ( $method && is_file(WEBPATH . DS . $tmp . $method . EXT) ) {
-					$this->controller = $method;
-					$this->param = array_slice($paths, $k+1);
-					$this->path = $tmp;
+			$tmp = '';
+			while($tmp_dirs)
+			{
+				$this->path = implode(DS, $tmp_dirs) . DS;
+				$this->controller = array_pop($tmp_dirs);
+				$this->method = '';
+				var_dump(WEBPATH . $this->path . self::CTL_NAME . EXT);
+				if(is_file(WEBPATH . $this->path . self::CTL_NAME . EXT)) {
 					break;
 				}
 			}
+			var_dump($this->controller);die;
 		}
 	}
 	
@@ -53,13 +52,14 @@ Class Router
 	 */
 	public function load()
 	{
-		require_once(WEBPATH . DS . $this->path . $this->controller . EXT);
+		var_dump(WEBPATH . $this->path . self::CTL_NAME . EXT);die;	
+		require_once(WEBPATH . $this->path . self::CTL_NAME . EXT);
+		
 		$class = ucfirst($this->controller);
 		$class = new $class();
 		if( method_exists($class, $this->method) ) {
 			call_user_func_array(array($class, $this->method), $this->param);
-		}
-		else{
+		} else {
 			throw new BadMethodCallException('bad method');
 		}
 	}

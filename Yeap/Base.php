@@ -60,6 +60,7 @@ Class Base
 	{
 		$path = trim($this->url, '/');
 		$this->router = new Router($path, $this->config);
+		$this->router->load();
 	}
 	
 	/**
