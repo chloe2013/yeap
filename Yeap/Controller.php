@@ -51,7 +51,7 @@ abstract class Controller
 	/**
 	 * Called after the controller method is run to send the response
 	 */
-	public function send() {}
+	public function _send() {}
 	
 	/**
 	 * layout
@@ -59,6 +59,17 @@ abstract class Controller
 	public function _layout()
 	{
 		
+	}
+	
+	/**
+	 * 设置模板
+	 */
+	private function _setTemplate()
+	{
+		$this->tpl = new Template_();
+		$this->tpl->template_dir = WEB_PATH;
+		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
+		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
 	}
 	
 	/**

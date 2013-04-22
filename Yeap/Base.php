@@ -12,11 +12,13 @@
 namespace Yeap;
 
 use Yeap\Config;
-use Yeap\Controller;
-use Yeap\Model;
-use Yeap\View;
+use Yeap\Router;
+//use Yeap\Controller;
+//use Yeap\Model;
+//use Yeap\View;
 use Yeap\Exceptions;
 use tpl\Template_;
+use \Exception;
 
 define('DS', '/');
 
@@ -40,11 +42,16 @@ Class Base
 	 */
 	public function display()
 	{
-		$this->_router();
+		try {
+			$this->_router();
+		}	
+		catch (Exception $e) {
+			echo $e->getMessage();
+		}
 	}
 	
 	/**
-	 * 
+	 * post 方法 处理
 	 */
 	public function post()
 	{
@@ -54,24 +61,14 @@ Class Base
 	
 	
 	/**
-	 * 
+	 * 路径路由到controller
 	 */
 	private function _router()
 	{
 		$path = trim($this->url, '/');
 		$this->router = new Router($path, $this->config);
-		$this->router->load();
-	}
-	
-	/**
-	 * 
-	 */
-	public function view()
-	{
-		$this->tpl = new Template_();
-		$this->tpl->template_dir = WEB_PATH;
-		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
-		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
+		$controller = $this->router->load();
+		$controller->_send();
 	}
 	
 }

@@ -2,4 +2,4 @@
 
 namespace Yeap;
 
-Class ConfigException extends \Exception{}
+Class YeapException extends \Exception{}

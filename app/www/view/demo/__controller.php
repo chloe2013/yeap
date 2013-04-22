@@ -9,4 +9,9 @@ Class Demo extends Controller
 		echo 'i am demo page';
 	}
 	
+	public function sub()
+	{
+		echo 'i am demo sub page';
+	}
+	
 }

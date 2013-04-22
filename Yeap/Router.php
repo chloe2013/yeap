@@ -7,7 +7,8 @@ use \BadMethodCallException;
 
 Class Router
 {
-	const CTL_NAME = '__controller';	
+	const CTL_NAME = '__controller';
+	const DEFAULT_METHOD = 'index';	
 	private $param = array();
 	private $method = 'index';
 	private $controller = 'index';
@@ -23,44 +24,49 @@ Class Router
 		// set controller and method
 		if( !$path ) {
 			$this->controller = $config->default_controller;
-			$this->method = $config->default_method;
+			$this->method = self::DEFAULT_METHOD;
 		} else {
 			$path = strtolower(trim(urldecode($path), DS));
-			$paths = explode(DS, $path);
-			var_dump($paths);
-			for($i = count($paths) - 1; $i >= 0; $i--) {
-				
-			}
-			// 循环路径
-			$tmp = '';
-			while($tmp_dirs)
-			{
-				$this->path = implode(DS, $tmp_dirs) . DS;
-				$this->controller = array_pop($tmp_dirs);
-				$this->method = '';
-				var_dump(WEBPATH . $this->path . self::CTL_NAME . EXT);
-				if(is_file(WEBPATH . $this->path . self::CTL_NAME . EXT)) {
+			$paths = array_filter(explode(DS, $path), 'strlen');
+			$len = count($paths);
+			// 倒序循环路径
+			for($i = $len - 1; $i >= 0; $i--) {
+				$tmp = implode(DS, array_slice($paths, 0, $i + 1)) . DS;
+				if($paths && is_file(WEBPATH . $tmp . self::CTL_NAME . EXT)) {
+					$this->controller = $paths[$i];
+					$this->method = isset($paths[$i+1]) ? $paths[$i+1] : self::DEFAULT_METHOD;
+					$this->path = $tmp;
+					$this->param = array_slice($paths, $i + 2);
 					break;
 				}
 			}
-			var_dump($this->controller);die;
 		}
 	}
 	
 	/**
 	 * load controller
+	 * @throw BadMethodCallException
 	 */
 	public function load()
 	{
-		var_dump(WEBPATH . $this->path . self::CTL_NAME . EXT);die;	
 		require_once(WEBPATH . $this->path . self::CTL_NAME . EXT);
-		
-		$class = ucfirst($this->controller);
-		$class = new $class();
-		if( method_exists($class, $this->method) ) {
-			call_user_func_array(array($class, $this->method), $this->param);
-		} else {
-			throw new BadMethodCallException('bad method');
+		$controller = ucfirst($this->controller);
+		$controller = new $controller();
+		if( method_exists($controller, $this->method) ){
+			
 		}
+		else if( method_exists($class, self::DEFAULT_METHOD)) {
+			array_unshift($this->param, $this->method);
+			$this->method = self::DEFAULT_METHOD;
+		}
+		else {
+			throw new BadMethodCallException('error method');
+		}
+		if($this->param) {
+			call_user_func_array(array($controller, $this->method), $this->param);
+		} else {
+			$controller->{$this->method}();
+		}
+		return $controller;
 	}
 }

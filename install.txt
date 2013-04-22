@@ -1,0 +1,528 @@
+#######################################################################
+## vmware && java install
+#######################################################################
+chmod +x VMware-Player-5.0.2-1031769.x86_64.bundle
+./VMware-Player-5.0.2-1031769.x86_64.bundle
+
+#VMWARE FIX
+cd /tmp
+wget http://www.sputnick-area.net/scripts/vmware7.1.1-patch-kernel-2.6.35.bash
+sudo chmod +x vmware7.1.1-patch-kernel-2.6.35.bash
+sudo ./vmware7.1.1-patch-kernel-2.6.35.bash
+sudo vmware-modconfig --console --install-all
+
+GHOST XP
+首次用虚拟机安装会有一个问题，那就是分配的虚拟硬盘没有分区，要用PQ（一般安装盘都带）进行分区，分区后重新启动，进行安装，我用的是TomatoGhostXP_SP3_V1.2.iso（非常好用，其中还包括winpe）。
+
+安装之后新的问题又来了：
+VMware下ghost安装XP后无法从硬盘启动问题的解决
+这种情况多发生在手动使用PQ给虚拟硬盘分区并GHOST安装XP后。明明在BIOS里设置了从硬盘引导，可就是找不到硬盘。解决方法是再次启动PQ，右键C盘将其设为“作用”。然后重新启动，OK！
+
+这个Ghost版的xp非常好，能够自动安装vmware的相关驱程，但是为了能够使虚拟机和主机进行交互，还是要安装一下vmware tools。
+
+==================================================================================================
+#emesene 添加用户修复
+sudo sed -i.bak 's/09607671-1C32-421F-A6A6-CBFAA51AB5F4/CFE80F9D-180F-4399-82AB-413F33A1FA11/g' /usr/share/emesene/emesenelib/XmlParser.py
+
+#eclipse svn install
+从packages.ubuntu.com查找相应的包，查找 javahl
+
+下载 libsvn-java_1.6.6dfsg-2ubuntu1_i386.deb
+
+安装提示还缺少 libapr1 继续下载
+
+安装之后，被放在了/usr/lib/jni下面，这是Eclipse默认无法读取的。为eclipse 添加一个 path 应该可以拉
+
+修改eclipse.ini文件，添加下面内容：
+
+-Djava.library.path=/usr/lib/jni
+
+重启eclipse (不重启估计也行)...OK
+
+----------------------------------------------------------------------------------
+
+简单的方式就是---执行命令安装：
+
+sudo apt-get install libsvn-java
+
+仍然需要修改eclipse.ini文件，同上
+
+To fix the problem use the Subversive update site http://download.eclipse.org/technology/subversive/0.7/update-site/ to update the Subversive plugin
+
+#######################################################################
+## server install Q&A
+#######################################################################
+
+cd ~/soft
+## nginx install ##
+wget http://nginx.org/download/nginx-1.2.7.tar.gz
+tar zxvf nginx-1.2.7.tar.gz
+cd nginx-1.2.7/
+find . -type f -exec touch {} \;
+
+./configure --user=yxq --group=yxq --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_gzip_static_module
+
+make && make install
+
+ln -s /usr/local/nginx/sbin/nginx /usr/bin/
+
+## svn install ##
+apt-get install subversion
+apt-get install subversion-tools
+
+adduser svn
+addgroup svn
+
+mkdir /home/svn
+cd /home/svn
+mkdir test
+chown -R root:svn test
+chmod -R g+rws test
+/usr/bin/svnadmin create /home/svn/test
+svnserve -d -r /home/svn
+
+## get soft ##
+wget http://cn.php.net/get/php-5.4.9.tar.gz/from/cn2.php.net/mirror
+wget https://github.com/downloads/libevent/libevent/libevent-2.0.18-stable.tar.gz
+wget http://memcached.googlecode.com/files/memcached-1.4.13.tar.gz
+wget http://pecl.php.net/get/memcache-3.0.6.tgz
+wget http://pecl.php.net/get/vld
+wget http://jaist.dl.sourceforge.net/project/eaccelerator/eaccelerator/eAccelerator%200.9.6.1/eaccelerator-0.9.6.1.tar.bz2
+wget ftp://ftp.u-aizu.ac.jp/pub/graphics/image/ImageMagick/imagemagick.org/ImageMagick-6.7.6-1.tar.gz
+wget http://pecl.php.net/get/imagick-3.1.0RC1.tgz
+wget http://downloads2.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+http://site.icu-project.org/download/51
+
+## intl requried icu
+## php install ##
+tar zxvf php-5.4.9.tar.gz 
+cd php-5.4.9/
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv=/usr/local/libiconv --sysconfdir=/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-pdo-mysql=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysqld.sock --enable-intl
+
+cd ~/soft/php-5.3.19/
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv=/usr/local/libiconv --sysconfdir=/usr/local/php/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-pdo-mysql=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysqld.sock 
+
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-iconv=/usr/local/libiconv --sysconfdir=/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd
+
+make
+make install
+
+ln -fs /usr/local/php/bin/php /usr/bin/php
+ln -fs /usr/local/php/bin/php-config /usr/bin/php-config
+ln -fs /usr/local/php/bin/phpize /usr/bin/phpize
+
+cp php.ini-development /etc/php/php.ini
+
+## pear install ##
+apt-get install php-pear
+pear install PEAR
+
+## libevent ##
+tar zxvf libevent-2.0.18-stable.tar.gz 
+cd libevent-2.0.18-stable/
+./configure
+make && make install
+
+## memcached ##
+tar zxvf memcached-1.4.15.tgr.gz
+cd memcached-1.4.15
+./configure
+make && make test
+make install
+
+## pecl memcache ##
+tar zxf memcache-2.2.7.tgz
+cd ~/soft/memcache-2.2.7
+/usr/local/php/bin/phpize
+./configure --enable-memcache --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+
+
+ ## pecl memcached requriled libmemcached ##
+tar zxvf memcached-2.1.0.tgz
+cd memcached-2.1.0
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make 
+make install
+
+## vld ##
+tar zxvf vld-0.11.2.tgz
+cd ~/soft/vld-0.11.2
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+
+## php -dvld.active=1 s.php
+
+## eaccelerator ##
+tar jxvf eaccelerator-0.9.6.1.tar.bz2
+cd ~/soft/eaccelerator-0.9.6.1/
+/usr/local/php/bin/phpize
+./configure --enable-eaccelerator=shared --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+cd ../
+
+## xcache for php 5.4 ##
+wget http://xcache.lighttpd.net/pub/Releases/3.0.1/xcache-3.0.1.tar.gz
+tar -zxf xcache-3.0.1.tar.gz
+cd ./xcache-3.0.1/
+/usr/local/php/bin/phpize
+./configure --enable-xcache --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+cat xcache.ini >> /usr/local/php/etc/php.ini
+
+## imagemagick ##
+tar zxvf ImageMagick.tar.gz
+cd ~/soft/ImageMagick-6.8.0-7/
+./configure
+make
+make install
+cd ../
+
+tar zxvf imagick-3.1.0RC2.tgz
+cd ~/soft/imagick-3.1.0RC2/
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+cd ../
+
+## xdebug for php5.4 ##
+tar -xzf xdebug-2.2.0.tgz
+cd ../xdebug-2.2.0
+/usr/local/php/bin/phpize
+./configure --enable-xdebug  --with-php-config=/usr/local/php/bin/php-config
+make
+make install
+
+## APC ##
+tar -zxf APC-3.1.13.tar.gz
+cd ../APC-3.1.13/
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+## intl ##
+wget http://pecl.php.net/get/intl-3.0.0b1.tgz
+tar -zxvf intl-3.0.0b1.tgz
+cd ./intl-3.0.0b1/
+/usr/local/php/bin/phpize
+./configure --enable-intl --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+## xhprof ##
+wget http://pecl.php.net/get/xhprof-0.9.2.tgz
+tar -zxvf xhprof-0.9.2.tgz
+cd ./xhprof-0.9.2/extension/
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+## yaf ##
+wget http://pecl.php.net/get/yaf-2.2.9.tgz
+tar -zxvf yaf-2.2.9.tgz
+cd ./yaf-2.2.9/
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+## mongo 5.4 ##
+wget http://pecl.php.net/get/mongo-1.3.4.tgz
+tar zxvf mongo-1.3.4.tgz
+cd ~/soft/mongo-1.3.4
+/usr/local/php/bin/phpize
+./configure --enable-mongo --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+## ioncube ##
+tar zxvf ioncube_loaders_lin_x86-64.tar.gz
+cd ioncube
+cp ioncube_loader_lin_5.4.so /usr/local/ioncube/ioncube_loader_lin_5.4.so
+
+## webbench ##
+wget http://home.tiscali.cz/~cz210552/distfiles/webbench-1.5.tar.gz
+tar zxvf webbench-1.5.tar.gz
+cd webbench-1.5
+make && make install
+
+webbench -c 500 -t 30 http://127.0.0.1/test.jpg
+
+## gearmand depand boost
+## boost
+wget http://cdnetworks-us-2.dl.sourceforge.net/project/boost/boost/1.53.0/boost_1_53_0.tar.gz  
+tar xvzf  boost_1_53_0.tar.gz  
+cd boost_1_53_0  
+ ./bootstrap.sh --prefix=/usr/local/boost  
+bjam install  
+ln -s /usr/local/boost/include/boost/ /usr/local/include/boost  
+ln -s /usr/local/boost/lib/libboost_program_options.so  /usr/lib/libboost_program_options.so
+sudo apt-get install libev-libevent-dev uuid-dev
+
+wget https://launchpad.net/gearmand/trunk/1.1.5/+download/gearmand-1.1.5.tar.gz  
+tar -zxvf gearmand-1.1.5.tar.gz  
+cd gearmand-1.1.5 
+./configure --prefix=/usr/local/gearmand 
+make && make install
+
+## php gearman
+wget http://pecl.php.net/get/gearman-1.0.2.tgz  
+tar -zxvf gearman-1.0.2.tgz  
+cd gearman-1.0.2  
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make && make install
+
+
+mkdir -p /usr/local/eaccelerator_cache
+gedit /usr/local/php/etc/php.ini
+
+## extension php.ini
+extension_dir = "/usr/local/php/lib/php/extensions/no-debug-non-zts-20100525/"
+zend_extension=/usr/local/ioncube/ioncube_loader_lin_5.4.so
+extension=memcache.so
+extension=vld.so
+extension=imagick.so
+extension=apc.so
+extension=yaf.so
+extension=intl.so
+extension=mongo.so
+
+[eaccelerator]
+extension=eaccelerator.so
+eaccelerator.shm_size="64"
+eaccelerator.cache_dir="/usr/local/eaccelerator_cache"
+eaccelerator.enable="1"
+eaccelerator.optimizer="1"
+eaccelerator.check_mtime="1"
+eaccelerator.debug="0"
+eaccelerator.filter=""
+eaccelerator.shm_max="0"
+eaccelerator.shm_ttl="3600"
+eaccelerator.shm_prune_period="3600"
+eaccelerator.shm_only="0"
+eaccelerator.compress="1"
+eaccelerator.compress_level="9"
+
+/usr/local/php/lib/php/extensions/no-debug-non-zts-20100525/
+
+
+SIGINT, SIGTERM 立刻终止
+SIGQUIT 平滑终止
+SIGUSR1 重新打开日志文件
+SIGUSR2 平滑重载所有worker进程并重新载入配置和二进制模块
+
+示例：
+php-fpm 关闭：
+kill -SIGINT `cat /usr/local/php/var/run/php-fpm.pid`
+php-fpm 重启：
+kill -SIGUSR2 `cat /usr/local/php/var/run/php-fpm.pid`
+
+# cp -f /home/yxq/soft/php-5.4.4/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+# chmod 755 /etc/init.d/php-fpm
+
+/etc/init.d/php-fpm start
+
+######################################################################################
+## 3. mysql编译安装
+######################################################################################
+wget http://www.cmake.org/files/v2.8/cmake-2.8.5.tar.gz
+
+# wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.22.tar.gz/from/http://ftp.iij.ad.jp/pub/db/mysql/
+wget http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5/mysql-5.5.22.tar.gz
+# tar zxvf mysql-5.5.22.tar.gz
+# cd mysql-5.5.22
+apt-get install cmake
+apt-get install libncurses5-dev
+# /usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DSYSCONFDIR=/etc/mysql -DMYSQL_UNIX_ADDR=/tmp/mysqld.sock -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DENABLED_LOCAL_INFILE=1 -DWITH_SSL=yes -DCMAKE_BUILD_TYPE=Release -DWITH_SPHINX_STORAGE_ENGINE=1 -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DEXTRA_CHARSETS=all -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql
+
+# make && make install
+
+参数说明:
+-DCMAKE_INSTALL_PREFIX=/usr/local/mysql //安装目录
+-DMYSQL_DATADIR=/usr/local/mysql/data //数据库存放目录
+-DWITH_MYISAM_STORAGE_ENGINE=1 //安装myisam存储引擎
+-DWITH_INNOBASE_STORAGE_ENGINE=1 //安装innodb存储引擎
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 //安装archive存储引擎
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 //安装blackhole存储引擎
+-DENABLED_LOCAL_INFILE=1 //允许从本地导入数据
+-DDEFAULT_CHARSET=utf8 　　//使用utf8字符
+-DDEFAULT_COLLATION=utf8_general_ci //校验字符
+-DEXTRA_CHARSETS=all 　　//安装所有扩展字符集
+-DMYSQL_TCP_PORT=3306 //MySQL监听端口
+-DMYSQL_USER=mysql //MySQL用户名
+
+其他参数:
+-DWITH-EMBEDDED_SERVER=1 //编译成embedded MySQL library (libmysqld.a)
+-DSYSCONFDIR=/etc //MySQL配辑文件
+-DMYSQL_UNIX_ADDR=/tmp/mysqld.sock //Unix socket 文件路径
+-DWITH_READLINE=1 //快捷键功能
+-DWITH_SSL=yes //SSL
+-DWITH_MEMORY_STORAGE_ENGINE=1 //安装memory存储引擎
+-DWITH_FEDERATED_STORAGE_ENGINE=1 //安装frderated存储引擎
+-DWITH_PARTITION_STORAGE_ENGINE=1 //安装数据库分区
+-DINSTALL_PLUGINDIR=/usr/local/mysql/plugin //插件文件及配置路径
+
+4. mysql 配置
+# groupadd -g 3306 mysql
+# useradd -u 3306 -g mysql -M -s /sbin/nologin mysql
+
+# chown -R mysql:mysql /usr/local/mysql
+chown -R root:mysql /usr/local/mysql/data
+# cp support-files/my-medium.cnf /etc/my.cnf
+bin/mysqld_safe --user=mysql &
+
+# cp /usr/local/mysql/scripts/mysql_install_db /usr/local/mysql/.
+# chmod 777 /usr/local/mysql/data
+# /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/mysql/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+# cp support-files/mysql.server /etc/init.d/mysqld
+# chmod +x /etc/init.d/mysqld
+vi /etc/init.d/mysqld （编辑此文件，查找并修改以下变量内容：）
+basedir=/usr/local/mysql
+datadir=/usr/local/mysql/data
+# chkconfig --add mysqld
+# chkconfig --level 2345 mysqld on
+
+4. 启动 mysql
+
+/usr/local/mysql/bin/mysqld_safe &
+或者 /etc/init.d/mysqld start
+
+/usr/local/mysql/bin/mysqladmin -u root password '123456'
+/usr/local/mysql/bin/mysqladmin -u root -h localhost password '123456'
+/usr/local/mysql/bin/mysql_secure_installation
+cd /usr/local/mysql ; /usr/local/mysql/bin/mysqld_safe &
+cd /usr/local/mysql/mysql-test ; perl mysql-test-run.pl
+ps -ef | grep mysql
+kill -9 
+/usr/local/mysql/bin/mysqladmin -u root -p shutdown
+show variables like '%version%' 
+select version();
+
+######################################################################################
+## nginx.sh
+######################################################################################
+#! /bin/sh
+case $# in
+0) 
+    echo "-----------------------------------------------------------------------------" 
+    echo "[USAGE]" 
+    echo "   ./nginx.sh [start|stop|restart]" 
+    echo "-----------------------------------------------------------------------------" 
+;;
+1)
+    if [ $1 = "start" ]
+    then
+        echo "Starting nginx server..." 
+        /usr/local/nginx/sbin/nginx > /dev/null 2>&1
+        #/usr/local/php/sbin/php-fpm start 
+		/etc/init.d/php-fpm start 
+    elif [ $1 = "stop" ]
+    then
+        echo "Stopping nginx server..." 
+        /usr/local/nginx/sbin/nginx -s stop > /dev/null 2>&1
+        #/usr/local/php/sbin/php-fpm stop 
+		/etc/init.d/php-fpm stop
+    elif [ $1 = "restart" ]
+    then
+        echo "Restarting nginx server..."        
+        /usr/local/nginx/sbin/nginx -s reload > /dev/null 2>&1
+        #/usr/local/php/sbin/php-fpm restart 
+		/etc/init.d/php-fpm restart
+    else
+        echo "-----------------------------------------------------------------------------" 
+        echo "[USAGE]" 
+        echo "   ./nginx.sh [start|stop|restart]" 
+        echo "-----------------------------------------------------------------------------" 
+    fi
+;;
+*)
+    echo "-----------------------------------------------------------------------------" 
+    echo "[USAGE]" 
+    echo "   ./nginx.sh [start|stop|restart]" 
+    echo "-----------------------------------------------------------------------------" 
+;;
+esac
+######################################################################################
+## end
+######################################################################################
+
+http://www.rubynginx.com/index.php/2012/10/02/installing-popular-nosql-databases-on-ubuntu-12-04/
+
+######################################################################################
+## ruby + raily
+## http://guides.ruby-china.org/getting_started.html#5-1
+######################################################################################
+
+## yaml install
+$ sudo apt-get install build-essential bison
+$ sudo apt-get install libyaml-dev
+OR
+wget http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar zxf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure -prefix=/usr/local/libyaml
+make
+make install 
+
+## ruby install
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p374.tar.gz
+tar xzvf ruby-1.9.3-p374.tar.gz
+cd ruby-1.9.3-p374
+./configure -prefix=/usr/local/ruby --enable-shared --disable-install-doc --with-opt-dir=/usr/local/lib
+make && make install 
+
+浏览所有的configure参数
+./configure -help |more
+export PATH=/usr/local/ruby/bin:$PATH
+
+## 1.9已包含 不用安装
+rubygems是ruby的在线包管理工具
+wget http://rubyforge.org/frs/download.php/76729/rubygems-1.8.25.tgz
+tar xzvf rubygems-1.8.25.tgz
+cd rubygems-1.8.25/
+ruby setup.rb 
+
+## rail install
+gem sources -a http://ruby.taobao.org/
+gem sources --remove http://rubygems.org/
+gem sources -l
+gem install rails -v
+rails -v 
+rails new /home/ruby/blog --database=mysql
+
+## 安装C版本的数据库适配器
+http://www.tmtm.org/en/mysql/ruby/
+tar xzvf mysql-ruby-2.8.2.tar.gz
+cd mysql-ruby-2.8.2
+ruby extconf.rb --with-mysql-dir=/usr/local/mysql
+make && make install 
+
+http://www.fastcgi.com/dist/
+tar xzvf fcgi-2.4.0.tar.gz
+cd fcgi-2.4.0
+./configure --prefix=/usr/local/fcgi
+make && make install
+
+http://rubyforge.org/projects/fcgi/
+tar xzvf ruby-fcgi-0.8.7.tar.gz
+cd ruby-fcgi-0.8.7
+ruby install.rb config -- --with-fcgi-include=/usr/local/fcgi/include --with-fcgi-lib=/usr/local/fcgi/lib
+ruby install.rb setup
+ruby install.rb install 
+
+## 然后下载lighttpd：
+http://www.lighttpd.net/download/
+tar xzvf lighttpd-1.4.13.tar.gz
+cd lighttpd-1.4.13
+./configure --prefix=/usr/local/lighttpd 
+make && make install 
+
+## 编译后配置：
+cp doc/sysconfig.lighttpd /etc/sysconfig/lighttpd
+mkdir /etc/lighttpd
+cp doc/lighttpd.conf /etc/lighttpd/lighttpd.conf 
