@@ -12,39 +12,45 @@
  */
 namespace Yeap;
 
+use Yeap\Tpl\Template_;
+use \Exception;
+
 class View
 {
 
-	private $__view = NULL;
+	private $_view = NULL;
+	private $_layout = '';
+	private $_assign = array();
+	private $tpl;
 
 	/**
 	 * Returns a new view object for the given view.
 	 *
 	 * @param string $file the view file to load
-	 * @param string $module name (blank for current theme)
+	 * @param string $layout file
+	 * @param array $data for assgin to template
 	 */
-	public function __construct($file)
+	public function __construct($file, $layout = '', $data = array())
 	{
-		$this->__view = $file;
+		$this->_view = $file;
+		$this->_assign = $data;
+		$this->_layout = $layout;
+		$this->_setTemplate();
+	}
+	
+	/**
+	 * 设置模板
+	 */
+	private function _setTemplate()
+	{
+		$this->tpl = new Template_();
+		$this->tpl->template_dir = WEBPATH;
+		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
+		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
 	}
 
-
 	/**
-	 * Set an array of values
-	 *
-	 * @param array $array of values
-	 */
-	public function set($array)
-	{
-		foreach($array as $k => $v)
-		{
-			$this->$k = $v;
-		}
-	}
-
-
-	/**
-	 * Return the view's HTML
+	 * Return the view's HTML 不能抛出异常
 	 *
 	 * @return string
 	 */
@@ -53,15 +59,25 @@ class View
 		try {
 			ob_start();
 			extract((array) $this);
-			require SP . "View/" . $this->__view . EXT;
+			require WEBPATH . $this->_view . EXT;
 			return ob_get_clean();
 		}
-		catch(\Exception $e)
+		catch(Exception $e)
 		{
 			Error::exception($e);
 			return '';
 		}
 	}
+	
+	/**
+	 * layout
+	 */
+	protected function _layout()
+	{
+		
+	}
+	
+	
 
 }
 

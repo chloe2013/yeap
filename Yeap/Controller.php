@@ -12,14 +12,38 @@
  */
 namespace Yeap;
 
+use Yeap\View;
+
 abstract class Controller
 {
+	
+	private $view = '';
+	private $layout = '';
+	private $assign = array();
+	
 	/**
 	 * Set error handling and start session
 	 */
 	public function __construct()
 	{
 		
+	}
+	
+	/**
+	 * 在对象中调用一个不可访问方法时 都直接调用默认的方法
+	 * @param $method 要调用的方法名称
+	 * @param $args 枚举数组
+	 */
+	public function __call($method, $args)
+	{
+		array_unshift($args, $method);
+		$this->view = str_replace($method, 'index', $this->view);
+		if($args) {
+			call_user_func_array(array($this, 'index'), $args);
+		} else {
+			$this->index($args);
+		}
+		echo 'xxx';
 	}
 	
 	/**
@@ -49,37 +73,38 @@ abstract class Controller
 	*/
 
 	/**
-	 * Called after the controller method is run to send the response
+	 * Called after the controller method is output the response
 	 */
-	public function _send() {}
-	
-	/**
-	 * layout
-	 */
-	public function _layout()
+	public function _output()
 	{
-		
+		echo new View($this->view, $this->layout, $this->assign);
 	}
 	
 	/**
-	 * 设置模板
+	 * 赋值
+	 * @param array
 	 */
-	private function _setTemplate()
+	public function _assign($data = array())
 	{
-		$this->tpl = new Template_();
-		$this->tpl->template_dir = WEB_PATH;
-		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
-		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
+		$this->assign = $data;
 	}
 	
 	/**
-	 * view template
+	 * set layout file
 	 */
-	public function _view()
+	public function _layout($file)
 	{
-		
+		$this->layout = '_layout/' . $file . EXT;
 	}
-
+	
+	/**
+	 * set view file
+	 */
+	public function _view($file)
+	{
+		$this->view = $file;
+	}
+	
 }
 
 // End

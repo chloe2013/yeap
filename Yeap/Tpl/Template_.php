@@ -1,9 +1,9 @@
 <?php 
 // Template_ 2.2.7 2012-07-20 http://www.xtac.net Freeware - LGPL
 
-namespace tpl;
+namespace Yeap\Tpl;
 
-use tpl\TemplateCompiler;
+use Yeap\Tpl\TemplateCompiler;
 
 class Template_
 {

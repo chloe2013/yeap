@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Yeap' => $baseDir . '/',
+    'Yeap\Tpl' => $baseDir . '/Yeap/',
+    'Xtpl' => $baseDir . '/vendor/Xtpl/',
     'Twig_' => $vendorDir . '/twig/twig/lib/',
 );

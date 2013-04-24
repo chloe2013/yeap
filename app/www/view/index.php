@@ -14,7 +14,6 @@ define('EXT', '.php');
 define('APPPATH', realpath(dirname(dirname(__DIR__))) . '/');
 define('WEBPATH', realpath(__DIR__) . '/');
 define('CACHEPATH', realpath(dirname(dirname(APPPATH))) . '/cache/www/');
-//define('SYSPATH', realpath(dirname(APPPATH)) . '/Yeap/');
 define('VENDORPATH', realpath(dirname(APPPATH)) . '/vendor/');
 
 use Yeap\Base;

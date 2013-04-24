@@ -13,11 +13,7 @@ namespace Yeap;
 
 use Yeap\Config;
 use Yeap\Router;
-//use Yeap\Controller;
-//use Yeap\Model;
-//use Yeap\View;
 use Yeap\Exceptions;
-use tpl\Template_;
 use \Exception;
 
 define('DS', '/');
@@ -30,6 +26,7 @@ Class Base
 	private $config = null;
 	private $db 	= null;
 	private $router = null;
+	
     public function __construct()
 	{
 		$this->url = parse_url(getenv('REQUEST_URI'), PHP_URL_PATH);
@@ -43,7 +40,9 @@ Class Base
 	public function display()
 	{
 		try {
-			$this->_router();
+			$path = trim($this->url, '/');
+			$this->router = new Router($path, $this->config);
+			$this->router->load();
 		}	
 		catch (Exception $e) {
 			echo $e->getMessage();
@@ -59,16 +58,6 @@ Class Base
 	}
 	
 	
-	
-	/**
-	 * 路径路由到controller
-	 */
-	private function _router()
-	{
-		$path = trim($this->url, '/');
-		$this->router = new Router($path, $this->config);
-		$controller = $this->router->load();
-		$controller->_send();
-	}
-	
 }
+
+// End;

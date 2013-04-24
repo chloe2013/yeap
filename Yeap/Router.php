@@ -3,16 +3,38 @@
 namespace Yeap;
 
 use Yeap\Config;
-use \BadMethodCallException;
 
+/**
+ * 路由到控制器
+ */
 Class Router
 {
 	const CTL_NAME = '__controller';
-	const DEFAULT_METHOD = 'index';	
-	private $param = array();
-	private $method = 'index';
-	private $controller = 'index';
-	private $path = 'index/';
+	const DEFAULT_METHOD = 'index';
+	
+	/**
+	 * 访问参数
+	 * @var array
+	 */
+	private $param 	= array();
+	
+	/**
+	 * 方法名
+	 * @var string
+	 */
+	private $method = self::DEFAULT_METHOD;
+	
+	/**
+	 * 控制器目录名 和 class 一致
+	 * @var string
+	 */
+	private $controller = '';
+	
+	/**
+	 * 控制器路径
+	 * @var string
+	 */
+	private $path = '';
 	
 	/**	
 	 * 构造函数
@@ -21,10 +43,13 @@ Class Router
 	{
 		$config->load('router');
 		
+		// set default path and controller
+		$this->path = $config->default_controller . DS;
+		$this->controller = $config->default_controller;
+		
 		// set controller and method
 		if( !$path ) {
 			$this->controller = $config->default_controller;
-			$this->method = self::DEFAULT_METHOD;
 		} else {
 			$path = strtolower(trim(urldecode($path), DS));
 			$paths = array_filter(explode(DS, $path), 'strlen');
@@ -44,29 +69,19 @@ Class Router
 	}
 	
 	/**
-	 * load controller
-	 * @throw BadMethodCallException
+	 * load controller method
 	 */
 	public function load()
 	{
 		require_once(WEBPATH . $this->path . self::CTL_NAME . EXT);
 		$controller = ucfirst($this->controller);
 		$controller = new $controller();
-		if( method_exists($controller, $this->method) ){
-			
-		}
-		else if( method_exists($class, self::DEFAULT_METHOD)) {
-			array_unshift($this->param, $this->method);
-			$this->method = self::DEFAULT_METHOD;
-		}
-		else {
-			throw new BadMethodCallException('error method');
-		}
+		$controller->_view($this->path . $this->method);
 		if($this->param) {
 			call_user_func_array(array($controller, $this->method), $this->param);
 		} else {
 			$controller->{$this->method}();
 		}
-		return $controller;
+		$controller->_output();
 	}
 }

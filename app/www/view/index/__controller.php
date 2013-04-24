@@ -4,6 +4,11 @@ use Yeap\Controller;
 
 Class Index extends Controller
 {
+	public function __construct()
+	{
+		
+	}
+		
 	public function index()
 	{
 		echo 'i am index page';

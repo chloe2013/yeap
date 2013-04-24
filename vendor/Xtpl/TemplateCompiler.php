@@ -59,7 +59,7 @@
 
   ---------------------------------------------------------------------------*/
 
-namespace tpl;
+namespace Xtpl;
 
 class TemplateCompiler
 {
