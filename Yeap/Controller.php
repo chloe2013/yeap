@@ -16,9 +16,22 @@ use Yeap\View;
 
 abstract class Controller
 {
-	
+	/**
+	 * view file
+	 * @var string
+	 */
 	private $view = '';
+	
+	/**
+	 * layout file
+	 * @var string
+	 */
 	private $layout = '';
+	
+	/**
+	 * assign data
+	 * @var array
+	 */
 	private $assign = array();
 	
 	/**
@@ -31,6 +44,7 @@ abstract class Controller
 	
 	/**
 	 * 在对象中调用一个不可访问方法时 都直接调用默认的方法
+	 * 
 	 * @param $method 要调用的方法名称
 	 * @param $args 枚举数组
 	 */
@@ -46,7 +60,7 @@ abstract class Controller
 	}
 	
 	/**
-	 * default index page
+	 * default index method
 	 */
 	public function index()
 	{
@@ -54,25 +68,8 @@ abstract class Controller
 	}
 
 	/**
-	 * Called before the controller method is run
-	 *
-	 * @param string $method name that will be run
-	 */
-	public function init($method) {}
-
-
-	/* HTTP Request Methods
-	abstract public function run();		// Default for all non-defined request methods
-	abstract public function get();
-	abstract public function post();
-	abstract public function put();
-	abstract public function delete();
-	abstract public function options();
-	abstract public function head();
-	*/
-
-	/**
 	 * Called after the controller method is output the response
+	 * 输出数据
 	 */
 	public function _output()
 	{
@@ -80,7 +77,7 @@ abstract class Controller
 	}
 	
 	/**
-	 * 赋值
+	 * 赋值数组
 	 * @param array
 	 */
 	public function _assign($data = array())

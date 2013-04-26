@@ -17,11 +17,30 @@ use \Exception;
 
 class View
 {
-
+	
+	/**
+	 * view template file
+	 * @var string
+	 */
 	private $_view = '';
+	
+	/**
+	 * layout template file
+	 * @var string
+	 */
 	private $_layout = '';
+	
+	/**
+	 * assign data for template
+	 * @var array
+	 */
 	private $_assign = array();
-	private $tpl;
+	
+	/**
+	 * tpl object
+	 * @var object
+	 */
+	private $tpl = null;
 
 	/**
 	 * Returns a new view object for the given view.
