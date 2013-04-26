@@ -4,11 +4,11 @@
 	"autoload": {
 		"psr-0": {
 			"Yeap": "",
-			"Xtpl": "vendor/Xtpl/"
+			"Tpl": "vendor/tpl/",
+			"NotORM": "vendor/notorm/"
 		}
 	},
 	"require": {
-        "php": ">=5.3.3",
-        "twig/twig": "1.*"
+        "php": ">=5.3.3"
     }
 }

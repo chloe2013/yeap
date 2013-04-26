@@ -77,6 +77,7 @@ Class Router
 		$controller = ucfirst($this->controller);
 		$controller = new $controller();
 		$controller->_view($this->path . $this->method);
+		$controller->_layout('default');
 		if($this->param) {
 			call_user_func_array(array($controller, $this->method), $this->param);
 		} else {

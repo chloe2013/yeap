@@ -12,13 +12,13 @@
  */
 namespace Yeap;
 
-use Yeap\Tpl\Template_;
+use Tpl\Template;
 use \Exception;
 
 class View
 {
 
-	private $_view = NULL;
+	private $_view = '';
 	private $_layout = '';
 	private $_assign = array();
 	private $tpl;
@@ -35,18 +35,23 @@ class View
 		$this->_view = $file;
 		$this->_assign = $data;
 		$this->_layout = $layout;
-		$this->_setTemplate();
+		
+		$this->tpl = new Template();
+		$this->tpl->template_dir = WEBPATH;
+		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
+		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
 	}
 	
 	/**
 	 * 设置模板
 	 */
-	private function _setTemplate()
+	private function _print()
 	{
-		$this->tpl = new Template_();
-		$this->tpl->template_dir = WEBPATH;
-		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
-		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
+		$this->tpl->define('view', $this->_view . EXT);
+		$this->tpl->define('layout', $this->_layout);
+		$this->tpl->assign($this->_assign);
+		$this->tpl->assign('view', $this->tpl->fetch('view'));
+		print $this->tpl->fetch('layout');
 	}
 
 	/**
@@ -59,26 +64,15 @@ class View
 		try {
 			ob_start();
 			extract((array) $this);
-			require WEBPATH . $this->_view . EXT;
+			$this->_print();
 			return ob_get_clean();
 		}
 		catch(Exception $e)
 		{
-			Error::exception($e);
-			return '';
+			return 'error:' . $e->getMessage();
 		}
 	}
 	
-	/**
-	 * layout
-	 */
-	protected function _layout()
-	{
-		
-	}
-	
-	
-
 }
 
 // END

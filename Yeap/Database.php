@@ -13,6 +13,8 @@
  */
 namespace Yeap;
 
+use Yeap\Config;
+
 class Database
 {
 
@@ -37,11 +39,11 @@ class Database
 	 */
 	public function __construct(array $config)
 	{
+		// Save config for connection
+		$this->config = new Config('datebase');
+		
 		// Auto-detect database type from DNS
 		$this->type = current(explode(':', $config['dns'], 2));
-
-		// Save config for connection
-		$this->config = $config;
 
 		// MySQL uses a non-standard column identifier
 		if($this->type == 'mysql') $this->i = '`';

@@ -43,7 +43,6 @@ abstract class Controller
 		} else {
 			$this->index($args);
 		}
-		echo 'xxx';
 	}
 	
 	/**
