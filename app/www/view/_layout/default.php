@@ -12,11 +12,14 @@
 		delete these references -->
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link href="http://static.{config.domain}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="http://static.{config.domain}/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<div>
 			<header>
-				<h1>default2</h1>
+				<h1>demo</h1>
 			</header>
 			<nav>
 				<p>

@@ -13,6 +13,8 @@
 namespace Yeap;
 
 use Yeap\View;
+use Yeap\Database;
+use Yeap\ORM;
 
 abstract class Controller
 {
@@ -43,23 +45,6 @@ abstract class Controller
 	}
 	
 	/**
-	 * 在对象中调用一个不可访问方法时 都直接调用默认的方法
-	 * 
-	 * @param $method 要调用的方法名称
-	 * @param $args 枚举数组
-	 */
-	public function __call($method, $args)
-	{
-		array_unshift($args, $method);
-		$this->view = str_replace($method, 'index', $this->view);
-		if($args) {
-			call_user_func_array(array($this, 'index'), $args);
-		} else {
-			$this->index($args);
-		}
-	}
-	
-	/**
 	 * default index method
 	 */
 	public function index()
@@ -71,24 +56,29 @@ abstract class Controller
 	 * Called after the controller method is output the response
 	 * 输出数据
 	 */
-	public function _output()
+	public function output()
 	{
-		echo new View($this->view, $this->layout, $this->assign);
+		if($this->view)	{
+			echo new View($this->view, $this->layout, $this->assign);
+		}
 	}
 	
 	/**
 	 * 赋值数组
 	 * @param array
 	 */
-	public function _assign($data = array())
+	final public function assign($data = array())
 	{
-		$this->assign = $data;
+		if($data) {
+			$this->assign = array_merge($this->assign, $data);
+		}	
+		
 	}
 	
 	/**
 	 * set layout file
 	 */
-	public function _layout($file)
+	final public function layout($file)
 	{
 		$this->layout = '_layout/' . $file . EXT;
 	}
@@ -96,9 +86,19 @@ abstract class Controller
 	/**
 	 * set view file
 	 */
-	public function _view($file)
+	final public function view($file)
 	{
 		$this->view = $file;
+	}
+	
+	/**
+	 * load a db
+	 * @param string $name
+	 */
+	public function loadDb($name = '')
+	{
+		$db = new Database($name);
+		return $db;
 	}
 	
 }

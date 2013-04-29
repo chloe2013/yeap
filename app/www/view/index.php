@@ -7,9 +7,6 @@ if (isset($_GET['debug'])) {
     define('START_MEMORY_USAGE', memory_get_usage());
 }
 
-// The PHP file extension
-define('EXT', '.php');
-
 // define path
 define('APPPATH', realpath(dirname(dirname(__DIR__))) . '/');
 define('WEBPATH', realpath(__DIR__) . '/');

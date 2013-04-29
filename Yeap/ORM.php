@@ -18,6 +18,8 @@
  */
 namespace Yeap;
 
+use Yeap\Database;
+
 class ORM
 {
 
@@ -47,12 +49,9 @@ class ORM
 
 		if(! $id) return;
 
-		if(is_numeric($id))
-		{
+		if(is_numeric($id)) {
 			$this->data[static::$key] = $id;
-		}
-		else
-		{
+		} else {
 			$this->data = (array) $id;
 			$this->loaded = 1;
 		}
@@ -68,7 +67,7 @@ class ORM
 	 */
 	public function key()
 	{
-		return isset($this->data[static::$key])?$this->data[static::$key]:NULL;
+		return isset($this->data[static::$key]) ? $this->data[static::$key] : NULL;
 	}
 
 
@@ -77,9 +76,11 @@ class ORM
 	 *
 	 * @return array
 	 */
-	public function to_array()
+	public function toArray()
 	{
-		if($this->load()) return $this->data;
+		if($this->load()) {
+			return $this->data;
+		}
 	}
 
 
@@ -91,8 +92,7 @@ class ORM
 	 */
 	public function set($values)
 	{
-		foreach($values as $key => $value)
-		{
+		foreach($values as $key => $value) {
 			$this->__set($key, $value);
 		}
 		return $this;
@@ -107,8 +107,7 @@ class ORM
 	 */
 	public function __set($key, $value)
 	{
-		if( ! array_key_exists($key, $this->data) OR $this->data[$key] !== $value)
-		{
+		if( ! array_key_exists($key, $this->data) OR $this->data[$key] !== $value) {
 			$this->data[$key] = $value;
 			$this->changed[$key] = $key;
 			$this->saved = 0;
@@ -125,10 +124,11 @@ class ORM
 	public function __get($key)
 	{
 		// All this to get the primary key without loading the entity
-		if(isset($this->data[static::$key]))
-		{
+		if(isset($this->data[static::$key])) {
 			if($key == static::$key) return $this->data[static::$key];
-			if( ! $this->loaded) $this->load();
+			if( ! $this->loaded) {
+				$this->load();
+			}
 		}
 
 		//if(isset($this->data[static::$key]) AND ! $this->loaded) $this->load();
@@ -141,7 +141,9 @@ class ORM
 	 */
 	public function __isset($key)
 	{
-		if(isset($this->data[static::$key]) AND ! $this->loaded) $this->load();
+		if(isset($this->data[static::$key]) AND ! $this->loaded) {
+			$this->load();
+		}
 		return array_key_exists($key, $this->data) OR isset($this->related[$key]);
 	}
 
@@ -190,26 +192,23 @@ class ORM
 	{
 		$key = static::$key;
 
-		if($where)
-		{
+		if($where) {
 			// Find the record primary key in the database
 			$id = self::select('column', static::$key, NULL, $where);
 
-			if(empty($id))
-			{
+			if(empty($id)) {
 				$this->clear();
 				return FALSE;
 			}
 
 			$this->data[$key] = $id;
-		}
-		else
-		{
+		} else {
 			// Did we already load this object?
-			if($this->loaded) return TRUE;
+			if($this->loaded) {
+				return TRUE;
+			}
 
-			if(empty($this->data[$key]))
-			{
+			if(empty($this->data[$key])) {
 				//$this->clear();
 				return FALSE;
 			}
@@ -220,22 +219,17 @@ class ORM
 
 
 		// First check the cache
-		if(!($row = static::cache_get(static::$table . $id)))
-		{
+		if(!($row = static::cache_get(static::$table . $id))) {
 			// Then get from the database and cache
-			if($row = self::select('row', '*', $this, array($key => $id)))
-			{
+			if($row = self::select('row', '*', $this, array($key => $id))) {
 				static::cache_set(static::$table . $id, $row);
 			}
 		}
 
-		if($row)
-		{
+		if($row) {
 			$this->data = (array) $row;
 			return $this->saved = $this->loaded = TRUE;
-		}
-		else
-		{
+		} else {
 			$this->clear();
 		}
 	}
@@ -250,35 +244,28 @@ class ORM
 	public function related($alias)
 	{
 		// Already loaded?
-		if(isset($this->related[$alias])) return $this->related[$alias];
+		if(isset($this->related[$alias])) {
+			return $this->related[$alias];
+		}
 
-		if(isset(static::$belongs_to[$alias]))
-		{
+		if(isset(static::$belongs_to[$alias])) {
 			$model = static::$belongs_to[$alias];
 
-			if(is_array($model))
-			{
+			if(is_array($model)) {
 				$foreign_key = key($model);
 				$model = current($model);
-			}
-			else
-			{
+			} else {
 				$foreign_key = $model::$foreign_key;
 			}
 
 			return $this->related[$alias] = new $model($this->data[$foreign_key]);
-		}
-		elseif(isset(static::$has[$alias]))
-		{
+		} else if(isset(static::$has[$alias])) {
 			$model = static::$has[$alias];
 
-			if(is_array($model))
-			{
+			if(is_array($model)) {
 				$foreign_key = key($model);
 				$model = current($model);
-			}
-			else
-			{
+			} else {
 				$foreign_key = static::$foreign_key;
 			}
 
@@ -286,9 +273,7 @@ class ORM
 			$id = self::select('column', $model::$key, $model, array($foreign_key => $this->key()));
 
 			return $this->related[$alias] = new $model($id);
-		}
-		else
-		{
+		} else {
 			throw new \Exception(get_class($this). " propery $alias not found");
 		}
 	}

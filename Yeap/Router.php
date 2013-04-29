@@ -36,12 +36,15 @@ Class Router
 	 */
 	private $path = '';
 	
+	private $config = NULL;
+	
 	/**	
 	 * 构造函数
 	 */
 	public function __construct($path = '', Config $config)
 	{
 		$config->load('router');
+		$this->config = $config;
 		
 		// set default path and controller
 		$this->path = $config->default_controller . DS;
@@ -75,14 +78,34 @@ Class Router
 	{
 		require_once(WEBPATH . $this->path . self::CTL_NAME . EXT);
 		$controller = ucfirst($this->controller);
-		$controller = new $controller();
-		$controller->_view($this->path . $this->method);
-		$controller->_layout('default');
+		$controller = new $controller($this->config);
+		
+		// 方法不存在时调用默认方法
+		if(!method_exists($controller, $this->method)) {
+			array_unshift($this->param, $this->method);
+			$this->method = self::DEFAULT_METHOD;
+		}
+		
+		// 设置视图文件
+		$controller->view($this->path . $this->method);
+		
+		// 设置模版里用到的参数
+		$controller->assign(array('config' => $this->config->items()));
+		$controller->assign(array('url' => $this->path . $this->controller . $this->method));
+		
+		// 设置模版文件
+		$controller->layout('default');
+		
+		// 调用controller 方法
 		if($this->param) {
 			call_user_func_array(array($controller, $this->method), $this->param);
 		} else {
 			$controller->{$this->method}();
 		}
-		$controller->_output();
+		
+		// 视图输出
+		$controller->output();
 	}
 }
+
+// End;

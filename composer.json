@@ -9,6 +9,9 @@
 		}
 	},
 	"require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "doctrine/orm": "2.*",
+        "doctrine/mongodb-odm": "1.0.0-BETA8",
+        "symfony/yaml": "2.*"
     }
 }

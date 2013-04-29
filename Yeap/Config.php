@@ -33,10 +33,15 @@ Class Config
 	{
 		$config = array();
 		$config_file = 	'/_config/' . $file_name . EXT;
-		if(file_exists(WEBPATH . $config_file)) {
-			include(WEBPATH . $config_file);
-		} else if(file_exists(APPPATH . $config_file)) {
-			include(APPPATH . $config_file);
+		
+		// load app config
+		if(is_file(APPPATH . $config_file)) {
+			require(APPPATH . $config_file);
+		}
+		
+		// load web config
+		if(is_file(WEBPATH . $config_file)) {
+			require(WEBPATH . $config_file);
 		}
 		
 		// 把配置内容赋值给本类
@@ -48,10 +53,25 @@ Class Config
 	
 	/**
 	 * 获取配置项
+	 * @param string $field
 	 */
 	public function get($field)
 	{
-		return $this->$field;
+		if(property_exists($this, (string)$field)) {
+			return $this->$field;
+		}	
+		return NULL;
+	}
+	
+	/**
+	 * get all config items
+	 * @return array
+	 */
+	public function items()
+	{
+		return get_object_vars($this);
 	}
 	
 }
+
+// End;

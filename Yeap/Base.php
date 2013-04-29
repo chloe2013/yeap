@@ -16,7 +16,10 @@ use Yeap\Router;
 use Yeap\Exceptions;
 use \Exception;
 
+// The PHP file extension
+define('EXT', '.php');
 define('DS', '/');
+//define('IS_AJAX', strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
 
 Class Base
 {
@@ -30,8 +33,7 @@ Class Base
     public function __construct()
 	{
 		$this->url = parse_url(getenv('REQUEST_URI'), PHP_URL_PATH);
-		$this->is_ajax = strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
-		$this->config = new Config('base');
+		//$this->is_ajax = strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
 	}
 	
 	/**
@@ -39,6 +41,7 @@ Class Base
 	 */
 	public function display()
 	{
+		$this->config = new Config('base');
 		try {
 			$path = trim($this->url, '/');
 			$this->router = new Router($path, $this->config);

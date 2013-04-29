@@ -14,39 +14,57 @@
 namespace Yeap;
 
 use Yeap\Config;
+use \PDO;
+use \PDOException;
 
 class Database
 {
-
+	/**
+	 * pdo 
+	 * @var object
+	 */
 	public $pdo = NULL;
-
-	public $type = NULL;
-
+	
+	/**
+	 * database type mysql or pg
+	 * @var string
+	 */
+	public $type = 'mysql';
+	
+	/**
+	 * symbol mysql use "`"
+	 * @var string
+	 */
 	public $i = '"';
 
 	public $statements = array();
 
-	protected $config = array();
+	private $config = array();
 
 	public static $queries = array();
 
 	public static $last_query = NULL;
+	
 
 	/**
 	 * Set the database type and save the config for later.
 	 *
 	 * @param array $config
 	 */
-	public function __construct(array $config)
+	public function __construct($name = '')
 	{
 		// Save config for connection
-		$this->config = new Config('datebase');
+		$config = new Config('datebase');
+		$current = $name && isset($config['database'][$name]) ? $name : $config['active_db'];
+		$this->config = $config['database'][$current];
 		
 		// Auto-detect database type from DNS
-		$this->type = current(explode(':', $config['dns'], 2));
+		$this->type = strstr($this->config['dns'], ':', TRUE);
 
 		// MySQL uses a non-standard column identifier
-		if($this->type == 'mysql') $this->i = '`';
+		if($this->type == 'mysql') {
+			$this->i = '`';
+		}
 	}
 
 
@@ -57,16 +75,26 @@ class Database
 	{
 		extract($this->config);
 
-		// Clear config for security reasons
-		$this->config = NULL;
-
 		// Connect to PDO
-		$this->pdo = new \PDO($dns, $username, $password, $params);
-
+		try {
+			$this->pdo = new PDO($dns, $username, $password, $params);
+		} catch(PDOException $e) {
+			exit('db connection failed: ' . $e->getMessage());
+		}
+		
 		// PDO should throw exceptions
-		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
-
+	
+	/**
+	 * reconnect pdo
+	 */
+	public function reconnect()
+	{
+		if(! $this->pdo) {
+			$this->connect();
+		}
+	}
 
 	/**
 	 * Quotes a string for use in a query
@@ -76,7 +104,7 @@ class Database
 	 */
 	public function quote($value)
 	{
-		if( ! $this->pdo) $this->connect();
+		$this->reconnect();
 		return $this->pdo->quote($value);
 	}
 
@@ -106,12 +134,16 @@ class Database
 	 */
 	public function row($sql, array $params = NULL, $object = NULL)
 	{
-		if( ! $statement = $this->query($sql, $params)) return;
+		if( ! $statement = $this->query($sql, $params)) {
+			return;
+		}
 
-		$row = $statement->fetch(\PDO::FETCH_OBJ);
+		$row = $statement->fetch(PDO::FETCH_OBJ);
 
 		// If they want the row returned as a custom object
-		if($object) $row = new $object($row);
+		if($object) {
+			$row = new $object($row);
+		}
 
 		return $row;
 	}
@@ -128,13 +160,17 @@ class Database
 	 */
 	public function fetch($sql, array $params = NULL, $column = NULL)
 	{
-		if( ! $statement = $this->query($sql, $params)) return;
+		if( ! $statement = $this->query($sql, $params)) {
+			return;
+		}
 
 		// Return an array of records
-		if($column === NULL) return $statement->fetchAll(\PDO::FETCH_OBJ);
+		if($column === NULL) {
+			return $statement->fetchAll(PDO::FETCH_OBJ);
+		}
 
 		// Fetch a certain column from all rows
-		return $statement->fetchAll(\PDO::FETCH_COLUMN , $column);
+		return $statement->fetchAll(PDO::FETCH_COLUMN , $column);
 	}
 
 
@@ -152,24 +188,18 @@ class Database
 		self::$last_query = $sql;
 
 		// Connect if needed
-		if( ! $this->pdo) $this->connect();
+		$this->reconnect();
 
 		// Should we cached PDOStatements? (Best for batch inserts/updates)
-		if($cache_statement)
-		{
+		if($cache_statement) {
 			$hash = md5($sql);
 
-			if(isset($this->statements[$hash]))
-			{
+			if(isset($this->statements[$hash])) {
 				$statement = $this->statements[$hash];
-			}
-			else
-			{
+			} else {
 				$statement = $this->statements[$hash] = $this->pdo->prepare($sql);
 			}
-		}
-		else
-		{
+		} else {
 			$statement = $this->pdo->prepare($sql);
 		}
 
@@ -208,41 +238,26 @@ class Database
 	 */
 	public function insert($table, array $data, $cache_statement = TRUE)
 	{
-		$sql = $this->insert_sql($table, $data);
-
-		// PostgreSQL does not return the ID by default
-		if($this->type == 'pgsql')
-		{
-			// Insert record and return the whole row (the "id" field may not exist)
-			if($statement = $this->query($sql.' RETURNING "id"', array_values($data)))
-			{
-				// The first column *should* be the ID
-				return $statement->fetchColumn(0);
-			}
-
-			return;
-		}
-
-		// Insert data and return the new row's ID
-		return $this->query($sql, array_values($data), $cache_statement) ? $this->pdo->lastInsertId() : NULL;
-	}
-
-
-	/**
-	 * Create insert SQL
-	 *
-	 * @param array $data row data
-	 * @return string
-	 */
-	public function insertSql($table, $data)
-	{
 		$i = $this->i;
 
 		// Column names come from the array keys
 		$columns = implode("$i, $i", array_keys($data));
 
 		// Build prepared statement SQL
-		return "INSERT INTO $i$table$i ($i".$columns."$i) VALUES (" . rtrim(str_repeat('?, ', count($data)), ', ') . ')';
+		$sql = "INSERT INTO $i$table$i ($i".$columns."$i) VALUES (" . rtrim(str_repeat('?, ', count($data)), ', ') . ')';	
+
+		// PostgreSQL does not return the ID by default
+		if($this->type == 'pgsql') {
+			// Insert record and return the whole row (the "id" field may not exist)
+			if($statement = $this->query($sql.' RETURNING "id"', array_values($data))) {
+				// The first column *should* be the ID
+				return $statement->fetchColumn(0);
+			}
+			return;
+		}
+
+		// Insert data and return the new row's ID
+		return $this->query($sql, array_values($data), $cache_statement) ? $this->pdo->lastInsertId() : NULL;
 	}
 
 
@@ -289,23 +304,23 @@ class Database
 	 */
 	public function select($column, $table, $where = NULL, $limit = NULL, $offset = 0, $order = NULL)
 	{
-		$i = $this->i;
-
-		$sql = "SELECT $column FROM $i$table$i";
+		$sql = "SELECT {$column} FROM {$this->i}{$table}{$this->i}";
 
 		// Process WHERE conditions
 		list($where, $params) = $this->where($where);
 
 		// If there are any conditions, append them
-		if($where) $sql .= " WHERE $where";
+		if($where) {
+			$sql .= " WHERE $where";
+		}
 
 		// Append optional ORDER BY sorting
-		$sql .= self::order_by($order);
+		$sql .= self::orderBy($order);
 
+		// MySQL/SQLite use a different LIMIT syntax
 		if($limit)
 		{
-			// MySQL/SQLite use a different LIMIT syntax
-			$sql .= $this->type == 'pgsql' ? " LIMIT $limit OFFSET $offset" : " LIMIT $offset, $limit";
+			$sql .= $this->type == 'pgsql' ? " LIMIT {$limit} OFFSET {$offset}" : " LIMIT {$offset}, {$limit}";
 		}
 
 		return array($sql, $params);
@@ -322,21 +337,14 @@ class Database
 	{
 		$a = $s = array();
 
-		if($where)
-		{
-			$i = $this->i;
-
-			foreach($where as $c => $v)
-			{
+		if($where) {
+			foreach($where as $c => $v) {
 				// Raw WHERE conditions are allowed array(0 => '"a" = NOW()')
-				if(is_int($c))
-				{
+				if(is_int($c)) {
 					$s[] = $v;
-				}
-				else
-				{
+				} else {
 					// Column => Value
-					$s[] = "$i$c$i = ?";
+					$s[] = "{$this->i}{$c}{$this->i} = ?";
 					$a[] = $v;
 				}
 			}
@@ -350,18 +358,18 @@ class Database
 	/**
 	 * Create the ORDER BY clause for MySQL and SQLite (still working on PostgreSQL)
 	 *
-	 * @param array $fields to order by
+	 * @param array $fields to order by array('id'=>'asc')
 	 */
 	public function orderBy($fields = NULL)
 	{
 		if( ! $fields) return;
 
-		$i = $this->i;
-
 		$sql = ' ORDER BY ';
 
 		// Add each order clause
-		foreach($fields as $k => $v) $sql .= "$i$k$i $v, ";
+		foreach($fields as $k => $v) {
+			$sql .= "{$this->i}{$k}{$this->i} {$v}, ";
+		}
 
 		// Remove ending ", "
 		return substr($sql, 0, -2);

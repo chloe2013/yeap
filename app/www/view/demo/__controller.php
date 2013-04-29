@@ -11,13 +11,12 @@ Class Demo extends Controller
 		
 	public function index()
 	{
-		echo 'i am demo page';
-		$this->_assign(array('test' => 'sss'));
+		$this->assign(array('test' => ' i am demo page'));
 	}
 	
 	public function sub()
 	{
-		echo 'i am demo sub page';
+		$this->assign(array('test' => ' i am demo sub page'));
 	}
 	
 }

@@ -9,7 +9,13 @@
  */
 $config['database'] = array(
 	'master' => array(
-		'dns' => "mysql:host=127.0.0.1;port=3306;dbname=test",
+		'dns' => "mysql:host=127.0.0.1;port=3306;dbname=cake",
+		'username' => 'root',
+		'password' => '123456',
+		'params' => array()
+	),
+	'slave' => array(
+		'dns' => "mysql:host=127.0.0.1;port=3306;dbname=cake",
 		'username' => 'root',
 		'password' => '123456',
 		'params' => array()
