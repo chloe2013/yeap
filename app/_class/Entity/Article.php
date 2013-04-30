@@ -4,6 +4,10 @@ namespace Entity;
 
 use Yeap\Entity;
 
+/**
+ * @Entity
+ * @Table(name="article")
+ */
 class Article extends Entity
 {
     /** @Id @Column(type="integer") @GeneratedValue */

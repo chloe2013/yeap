@@ -5,12 +5,22 @@ namespace Entity;
 use Yeap\Entity;
 
 /**
- * user entity
+ * @Entity
+ * @Table(name="user")
  */
 class User extends Entity
 {
-    /** @Id @GeneratedValue @Column(type="string") */
+    /** 
+	 * @Id 
+	 * @Column(type="integer")
+	 * @GeneratedValue 
+	 */
     private $id;
+	
+	/**
+	 * 
+	 */
+	private $userName;
 
     /**
      * Bidirectional - Many users have Many favorite comments (OWNING SIDE)
