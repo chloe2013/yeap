@@ -8,8 +8,10 @@ if (isset($_GET['debug'])) {
 }
 
 // define path
-define('APPPATH', realpath(dirname(dirname(__DIR__))) . '/');
-define('WEBPATH', realpath(__DIR__) . '/');
+define('WEBPATH', realpath(dirname(__DIR__)) . '/');
+define('VIEWPATH', WEBPATH . 'view/');
+define('CTLPATH', WEBPATH . 'controller/');
+define('APPPATH', realpath(dirname(WEBPATH)) . '/');
 define('CACHEPATH', realpath(dirname(dirname(APPPATH))) . '/cache/www/');
 define('VENDORPATH', realpath(dirname(APPPATH)) . '/vendor/');
 

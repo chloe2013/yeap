@@ -9,7 +9,6 @@ use Yeap\Config;
  */
 Class Router
 {
-	const CTL_NAME = '__controller';
 	const DEFAULT_METHOD = 'index';
 	
 	/**
@@ -47,24 +46,27 @@ Class Router
 		$this->config = $config;
 		
 		// set default path and controller
-		$this->path = $config->default_controller . DS;
-		$this->controller = $config->default_controller;
+		$this->path = DS;
+		$this->controller = $config->get('defaultController');
 		
 		// set controller and method
-		if( !$path ) {
-			$this->controller = $config->default_controller;
-		} else {
+		if($path) {
 			$path = strtolower(trim(urldecode($path), DS));
 			$paths = array_filter(explode(DS, $path), 'strlen');
 			$len = count($paths);
 			// 倒序循环路径
 			for($i = $len - 1; $i >= 0; $i--) {
-				$tmp = implode(DS, array_slice($paths, 0, $i + 1)) . DS;
-				if($paths && is_file(WEBPATH . $tmp . self::CTL_NAME . EXT)) {
-					$this->controller = $paths[$i];
-					$this->method = isset($paths[$i+1]) ? $paths[$i+1] : self::DEFAULT_METHOD;
+				$tmp = implode(DS, array_slice($paths, 0, $i)) . DS;
+				$this->controller = ucfirst($paths[$i]);
+				if($paths && is_file(CTLPATH . $tmp . $this->controller . EXT)) {
+					if(isset($paths[$i+1]))
+					{
+						$this->method = $paths[$i+1];
+						$this->param = array_slice($paths, $i + 2);
+					} else {
+						$this->param = array_slice($paths, $i + 1);
+					}
 					$this->path = $tmp;
-					$this->param = array_slice($paths, $i + 2);
 					break;
 				}
 			}
@@ -76,22 +78,25 @@ Class Router
 	 */
 	public function load()
 	{
-		require_once(WEBPATH . $this->path . self::CTL_NAME . EXT);
-		$controller = ucfirst($this->controller);
+		require_once(CTLPATH . $this->path . $this->controller . EXT);
+		$controller = $this->controller;
 		$controller = new $controller($this->config);
 		
 		// 方法不存在时调用默认方法
-		if(!method_exists($controller, $this->method)) {
+		if($this->method != self::DEFAULT_METHOD 
+			&& !method_exists($controller, $this->method)) {
 			array_unshift($this->param, $this->method);
 			$this->method = self::DEFAULT_METHOD;
 		}
+		// url
+		$path = $this->path . strtolower($this->controller) . DS . $this->method;
 		
 		// 设置视图文件
-		$controller->view($this->path . $this->method);
+		$controller->view(trim($path, DS));
 		
 		// 设置模版里用到的参数
 		$controller->assign(array('config' => $this->config->items()));
-		$controller->assign(array('url' => $this->path . $this->controller . $this->method));
+		$controller->assign(array('url' => $path));
 		
 		// 设置模版文件
 		$controller->layout('default');

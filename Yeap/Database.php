@@ -54,12 +54,13 @@ class Database
 	public function __construct($name = '')
 	{
 		// Save config for connection
-		$config = new Config('datebase');
-		$current = $name && isset($config['database'][$name]) ? $name : $config['active_db'];
-		$this->config = $config['database'][$current];
+		$cfg = new Config('database');
+		$config = $cfg->get('database');
+		$current = $name && isset($config[$name]) ? $name : $cfg->active_db;
+		$this->config = $config[$current];
 		
 		// Auto-detect database type from DNS
-		$this->type = strstr($this->config['dns'], ':', TRUE);
+		$this->type = str_replace('pdo_', '', $config['driver']);
 
 		// MySQL uses a non-standard column identifier
 		if($this->type == 'mysql') {
@@ -74,10 +75,13 @@ class Database
 	public function connect()
 	{
 		extract($this->config);
+		
+		$dns = "{$this->type}:host={$host};port={$port};dbname={$dbname}";
+		$param = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES '{$charset}'");
 
 		// Connect to PDO
 		try {
-			$this->pdo = new PDO($dns, $username, $password, $params);
+			$this->pdo = new PDO($dns, $user, $password, $param);
 		} catch(PDOException $e) {
 			exit('db connection failed: ' . $e->getMessage());
 		}

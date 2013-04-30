@@ -1,6 +1,7 @@
 <?php
 
 use Yeap\Controller;
+use Model\User;
 
 Class Demo extends Controller
 {
@@ -11,6 +12,9 @@ Class Demo extends Controller
 		
 	public function index()
 	{
+		$user = new User();
+		$user->add();
+		
 		$this->assign(array('test' => ' i am demo page'));
 	}
 	

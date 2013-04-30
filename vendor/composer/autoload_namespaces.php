@@ -8,12 +8,11 @@ $baseDir = dirname($vendorDir);
 return array(
     'Yeap' => $baseDir . '/',
     'Tpl' => $vendorDir . '/tpl',
-    'Symfony\\Component\\Yaml\\' => $vendorDir . '/symfony/yaml',
     'Symfony\\Component\\Console\\' => $vendorDir . '/symfony/console',
-    'NotORM' => $vendorDir . '/notorm',
     'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib',
     'Doctrine\\ODM\\MongoDB' => $vendorDir . '/doctrine/mongodb-odm/lib',
     'Doctrine\\MongoDB' => $vendorDir . '/doctrine/mongodb/lib',
     'Doctrine\\DBAL' => $vendorDir . '/doctrine/dbal/lib',
     'Doctrine\\Common' => $vendorDir . '/doctrine/common/lib',
+    '' => $baseDir . '/app/_class',
 );

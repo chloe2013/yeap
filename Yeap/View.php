@@ -22,19 +22,19 @@ class View
 	 * view template file
 	 * @var string
 	 */
-	private $_view = '';
+	private $view = '';
 	
 	/**
 	 * layout template file
 	 * @var string
 	 */
-	private $_layout = '';
+	private $layout = '';
 	
 	/**
 	 * assign data for template
 	 * @var array
 	 */
-	private $_assign = array();
+	private $assign = array();
 	
 	/**
 	 * tpl object
@@ -51,12 +51,12 @@ class View
 	 */
 	public function __construct($file, $layout = '', $data = array())
 	{
-		$this->_view = $file;
-		$this->_assign = $data;
-		$this->_layout = $layout;
+		$this->view = $file;
+		$this->assign = $data;
+		$this->layout = $layout;
 		
 		$this->tpl = new Template();
-		$this->tpl->template_dir = WEBPATH;
+		$this->tpl->template_dir = VIEWPATH;
 		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
 		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
 	}
@@ -66,9 +66,9 @@ class View
 	 */
 	private function _print()
 	{
-		$this->tpl->define('view', $this->_view . EXT);
-		$this->tpl->define('layout', $this->_layout);
-		$this->tpl->assign($this->_assign);
+		$this->tpl->define('view', $this->view . EXT);
+		$this->tpl->define('layout', '_layout' . DS . $this->layout . EXT);
+		$this->tpl->assign($this->assign);
 		$this->tpl->assign('view', $this->tpl->fetch('view'));
 		print $this->tpl->fetch('layout');
 	}

@@ -80,7 +80,7 @@ abstract class Controller
 	 */
 	final public function layout($file)
 	{
-		$this->layout = '_layout/' . $file . EXT;
+		$this->layout = $file;
 	}
 	
 	/**

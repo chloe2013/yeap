@@ -24,7 +24,7 @@ define('DS', '/');
 Class Base
 {
     private $url 	= '/';
-	private $is_ajax = FALSE;
+	private $isAjax = FALSE;
 	private $tpl 	= null;
 	private $config = null;
 	private $db 	= null;
@@ -33,7 +33,7 @@ Class Base
     public function __construct()
 	{
 		$this->url = parse_url(getenv('REQUEST_URI'), PHP_URL_PATH);
-		//$this->is_ajax = strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
+		//$this->isAjax = strtolower(getenv('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest';
 	}
 	
 	/**
@@ -48,7 +48,7 @@ Class Base
 			$this->router->load();
 		}	
 		catch (Exception $e) {
-			echo $e->getMessage();
+			echo $e->getMessage();die;
 		}
 	}
 	
