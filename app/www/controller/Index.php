@@ -8,10 +8,24 @@ Class Index extends Controller
 	{
 		
 	}
-		
+	
+	/**	
+	 * 淘宝api处理
+	 * localhost/?code=ssssfff&state=VEIwMg==
+	 */
 	public function index()
 	{
-		$this->layout('blank');	
+		$data = $_GET;
+		if(isset($data['state']) && isset($data['code']))
+		{
+			$shop = urlencode(base64_decode($data['state']));
+			$code = $data['code'];
+			$url = "http://api.ta.amgbs.com/token/fetchTbToken/{$shop}/{$code}";
+			header('Location: '.$url);
+			exit;
+		}
+		$this->layout('blank');
 		$this->assign(array('content' => 'hello world!'));
 	}
+	
 }

@@ -14,13 +14,13 @@ abstract Class Model
 	 * 实体管理器
 	 * @var \Doctrine\ORM\EntityManager
 	 */
-	protected $em;
+	protected static $em;
 		
 	public function __construct()
 	{
-		if(null === $this->em)
+		if(null === self::$em)
 		{
-			$this->em = self::getEntityManager();
+			self::$em = self::getEntityManager();
 		}
 	}
 	

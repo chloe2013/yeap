@@ -57,8 +57,8 @@ Class Router
 			// 倒序循环路径
 			for($i = $len - 1; $i >= 0; $i--) {
 				$tmp = implode(DS, array_slice($paths, 0, $i)) . DS;
-				$this->controller = ucfirst($paths[$i]);
-				if($paths && is_file(CTLPATH . $tmp . $this->controller . EXT)) {
+				$controller = ucfirst($paths[$i]);
+				if($paths && is_file(CTLPATH . $tmp . $controller . EXT)) {
 					if(isset($paths[$i+1]))
 					{
 						$this->method = $paths[$i+1];
@@ -67,6 +67,7 @@ Class Router
 						$this->param = array_slice($paths, $i + 1);
 					}
 					$this->path = $tmp;
+					$this->controller = $controller;
 					break;
 				}
 			}
