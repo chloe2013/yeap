@@ -3,5 +3,5 @@
 namespace Yeap;
 
 Class YeapException extends \Exception{}
-Class FormException extends \Exception{}
-Class CheckException extends \Exception{}
+Class FormException extends \YeapException{}
+Class CheckException extends \YeapException{}
