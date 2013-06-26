@@ -5,14 +5,14 @@
 		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
 		Remove this if you use the .htaccess -->
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<title>hello test</title>
+		<title>{title} - test</title>
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and
 		delete these references -->
 		<link rel="shortcut icon" href="http://static.{config.domain}/img/favicon.ico" />
 		<link rel="apple-touch-icon" href="http://static.{config.domain}/apple-touch-icon.png" />
-		<link href="http://static.{config.domain}/css/merge/??bootstrap.css,jquery-ui.css,plugin.css" rel="stylesheet" media="screen">
+		<link href="http://static.{config.domain}/css/??bootstrap.css,jquery-ui.css,plugin.css" rel="stylesheet" media="screen">
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,7 +28,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"> <img alt="Charisma Logo" src="img/logo20.png" /> <span>Charisma</span></a>
+				<a class="brand" href="index.html"> <img alt="Charisma Logo" src="http://static.{config.domain}/img/logo20.png" /> <span>Charisma</span></a>
 				
 				<!-- theme selector starts -->
 				<div class="btn-group pull-right theme-container" >
@@ -117,7 +117,6 @@
 			<div id="content" class="span10">
 			<!-- content starts -->
 			
-
 			<div>
 				<ul class="breadcrumb">
 					
@@ -126,16 +125,17 @@
 					</li>
 					{@breadcrumb}
 					<li>
-						<a href="#">Blank</a>
+						<a href="#">{.value_}</a> <span class="divider">/</span>
 					</li>
 					{/}
+					{title}
 				</ul>
 			</div>
-			{#view}
+			
 			<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header well" data-original-title>
-						<h2><i class="icon-picture"></i>Blank</h2>
+						<h2><i class="icon-picture"></i>{title}</h2>
 						<div class="box-icon">
 							<a href="#" class="btn btn-setting btn-round"><i class="icon-cog"></i></a>
 							<a href="#" class="btn btn-minimize btn-round"><i class="icon-chevron-up"></i></a>
@@ -143,7 +143,7 @@
 						</div>
 					</div>
 					<div class="box-content">
-						
+						{#view}
 					</div>
 				</div><!--/span-->
 			
@@ -159,10 +159,10 @@
 		<div class="modal hide fade" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3>Settings</h3>
+				<h3>Tips</h3>
 			</div>
 			<div class="modal-body">
-				<p>Here settings can be configured...</p>
+				<p>Here something for Tips...</p>
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -171,12 +171,12 @@
 		</div>
 
 		<footer>
-			<p class="pull-left">&copy; <a href="http://usman.it" target="_blank">Muhammad Usman</a> 2012</p>
+			<p class="pull-left">&copy; <a href="http://usman.it" target="_blank">Muhammad Usman</a> 2013</p>
 			<p class="pull-right">Powered by: <a href="http://usman.it/free-responsive-admin-template">Charisma</a></p>
 		</footer>
 		
 	</div><!--/.fluid-container-->
 		
-		<script src="http://static.{config.domain}/js/merge/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,chart.js,charisma.js"></script>
+		<script src="http://static.{config.domain}/js/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,chart.js,charisma.js"></script>
 	</body>
 </html>

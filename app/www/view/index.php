@@ -11,6 +11,7 @@ if (isset($_GET['debug'])) {
 define('WEBPATH', realpath(dirname(__DIR__)) . '/');
 define('VIEWPATH', WEBPATH . 'view/');
 define('CTLPATH', WEBPATH . 'controller/');
+define('DOMAIN', 'Www');
 define('APPPATH', realpath(dirname(WEBPATH)) . '/');
 define('CACHEPATH', realpath(dirname(dirname(APPPATH))) . '/cache/www/');
 define('VENDORPATH', realpath(dirname(APPPATH)) . '/vendor/');

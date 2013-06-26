@@ -3,6 +3,8 @@
 namespace Yeap;
 
 use Yeap\Config;
+use \ReflectionClass;
+use App\Controller;
 
 /**
  * 路由到控制器
@@ -83,6 +85,9 @@ Class Router
 		$controller = $this->controller;
 		$controller = new $controller($this->config);
 		
+		// 反射类
+		//$rc = new ReflectionClass('App\\'.DOMAIN.'\\Controller\\'.$this->controller);
+		
 		// 方法不存在时调用默认方法
 		if($this->method != self::DEFAULT_METHOD 
 			&& !method_exists($controller, $this->method)) {
@@ -93,11 +98,13 @@ Class Router
 		$path = $this->path . strtolower($this->controller) . DS . $this->method;
 		
 		// 设置视图文件
-		$controller->view(trim($path, DS));
+		$controller->view(rtrim($path, DS));
 		
-		// 设置模版里用到的参数
+		// 设置模版里可能用到的参数
 		$controller->assign(array('config' => $this->config->items()));
 		$controller->assign(array('url' => $path));
+		
+		// 页面标题加载
 		
 		// 设置模版文件
 		$controller->layout('default');
