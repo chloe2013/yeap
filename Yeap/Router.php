@@ -81,12 +81,13 @@ Class Router
 	 */
 	public function load()
 	{
-		require_once(CTLPATH . $this->path . $this->controller . EXT);
-		$controller = $this->controller;
-		$controller = new $controller($this->config);
+		//require_once(CTLPATH . $this->path . $this->controller . EXT);
+		//$controller = $this->controller;
+		//$controller = new $controller($this->config);
 		
 		// 反射类
-		//$rc = new ReflectionClass('App\\'.DOMAIN.'\\Controller\\'.$this->controller);
+		$rc = new ReflectionClass('App\\'.DOMAIN.'\\Controller\\'.$this->controller);
+		$controller = $rc->newInstance($this->config);
 		
 		// 方法不存在时调用默认方法
 		if($this->method != self::DEFAULT_METHOD 

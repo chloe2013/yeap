@@ -6,13 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Yeap' => $baseDir . '/',
-    'Tpl' => $vendorDir . '/tpl',
-    'Symfony\\Component\\Console\\' => $vendorDir . '/symfony/console',
-    'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib',
-    'Doctrine\\ODM\\MongoDB' => $vendorDir . '/doctrine/mongodb-odm/lib',
-    'Doctrine\\MongoDB' => $vendorDir . '/doctrine/mongodb/lib',
-    'Doctrine\\DBAL' => $vendorDir . '/doctrine/dbal/lib',
-    'Doctrine\\Common' => $vendorDir . '/doctrine/common/lib',
-    '' => $baseDir . '/app/_class',
+    'Yeap' => array($baseDir . '/'),
+    'Tpl' => array($vendorDir . '/tpl'),
+    'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
+    'Doctrine\\ORM' => array($vendorDir . '/doctrine/orm/lib'),
+    'Doctrine\\ODM\\MongoDB' => array($vendorDir . '/doctrine/mongodb-odm/lib'),
+    'Doctrine\\MongoDB' => array($vendorDir . '/doctrine/mongodb/lib'),
+    'Doctrine\\DBAL' => array($vendorDir . '/doctrine/dbal/lib'),
+    'Doctrine\\Common' => array($vendorDir . '/doctrine/common/lib'),
+    'App\\Www\\Controller' => array($baseDir . '/app/www/controller'),
+    'App\\Admin\\Controller' => array($baseDir . '/app/admin/controller'),
+    '' => array($baseDir . '/app/_class'),
 );
