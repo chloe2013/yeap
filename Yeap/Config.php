@@ -32,7 +32,7 @@ Class Config
 	public function load($file = '')
 	{
 		$config = array();
-		$configFile = 	'/_config/' . $file . EXT;
+		$configFile = 	'/_Config/' . $file . EXT;
 		
 		// load app config
 		if(is_file(APPPATH . $configFile)) {

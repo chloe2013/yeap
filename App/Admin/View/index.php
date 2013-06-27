@@ -9,9 +9,9 @@ if (isset($_GET['debug'])) {
 
 // define path
 define('WEBPATH', realpath(dirname(__DIR__)) . '/');
-define('VIEWPATH', WEBPATH . 'view/');
-define('CTLPATH', WEBPATH . 'controller/');
-define('DOMAIN', 'Www');
+define('VIEWPATH', WEBPATH . 'View/');
+define('CTLPATH', WEBPATH . 'Controller/');
+define('DOMAIN', 'Admin');
 define('APPPATH', realpath(dirname(WEBPATH)) . '/');
 define('CACHEPATH', realpath(dirname(dirname(APPPATH))) . '/cache/www/');
 define('VENDORPATH', realpath(dirname(APPPATH)) . '/vendor/');

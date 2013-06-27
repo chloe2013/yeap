@@ -29,4 +29,4 @@ $config['database'] = array(
 );
 $config['active_db'] = 'master';
 $config['dev_mode'] = false;
-$config['mapping_path'] = '_data/mapping';
+$config['mapping_path'] = '_Data/mapping';

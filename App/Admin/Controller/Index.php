@@ -1,7 +1,8 @@
 <?php
-namespace App\Admin\Controller;
+namespace Admin\Controller;
 
-use Yeap\Controller;
+use Admin\Core\Controller;
+use Model\User;
 
 Class Index extends Controller
 {
@@ -15,7 +16,11 @@ Class Index extends Controller
 	 */
 	public function index()
 	{
+		$this->title('test');	
 		$this->assign(array('content' => 'hello world!'));
+		
+		$user = new User();
+		$user->add();
 	}
 	
 }

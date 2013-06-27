@@ -32,7 +32,7 @@ abstract Class Model
 	{
 		$cfg = new Config('database');
 		$paths = array(
-			APPPATH . '_class/Entity',
+			APPPATH . '_Class/Entity',
 		);
 		$config = Setup::createAnnotationMetadataConfiguration($paths, $cfg->get('dev_mode'));
 		$entityManager = EntityManager::create($cfg->get('database'), $config);

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Yeap' => array($baseDir . '/'),
+    'Www' => array($baseDir . '/App'),
     'Tpl' => array($vendorDir . '/tpl'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Doctrine\\ORM' => array($vendorDir . '/doctrine/orm/lib'),
@@ -14,7 +15,6 @@ return array(
     'Doctrine\\MongoDB' => array($vendorDir . '/doctrine/mongodb/lib'),
     'Doctrine\\DBAL' => array($vendorDir . '/doctrine/dbal/lib'),
     'Doctrine\\Common' => array($vendorDir . '/doctrine/common/lib'),
-    'App\\Www\\Controller' => array($baseDir . '/app/www/controller'),
-    'App\\Admin\\Controller' => array($baseDir . '/app/admin/controller'),
-    '' => array($baseDir . '/app/_class'),
+    'Admin' => array($baseDir . '/App'),
+    '' => array($baseDir . '/App/_Class'),
 );

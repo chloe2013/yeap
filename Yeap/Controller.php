@@ -37,6 +37,18 @@ abstract class Controller
 	private $assign = array();
 	
 	/**
+	 * breadcrumb
+	 * @var array
+	 */
+	private $breadcrumb = array();
+	
+	/**
+	 * title for page
+	 * @var string
+	 */
+	private $title = '';
+	
+	/**
 	 * Set error handling and start session
 	 */
 	public function __construct()
@@ -59,6 +71,8 @@ abstract class Controller
 	public function output()
 	{
 		if($this->view)	{
+			$this->assign['title']	= $this->title;
+			$this->assign['breadcrumb']	= $this->breadcrumb;
 			echo new View($this->view, $this->layout, $this->assign);
 		}
 	}
@@ -72,7 +86,6 @@ abstract class Controller
 		if($data) {
 			$this->assign = array_merge($this->assign, $data);
 		}	
-		
 	}
 	
 	/**
@@ -89,6 +102,24 @@ abstract class Controller
 	final public function view($file)
 	{
 		$this->view = $file;
+	}
+	
+	/**
+	 * set breadcrumb
+	 * @param string
+	 */
+	final public function bread($str)
+	{
+		$this->breadcrumb[] = $str;
+	}
+	
+	/**
+	 * set title for every page
+	 * @param string
+	 */
+	final public function title($title)
+	{
+		$this->title = $title;
 	}
 	
 	/**

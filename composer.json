@@ -3,11 +3,11 @@
 	"description": "a mirco framework",
 	"autoload": {
 		"psr-0": {
-			"Yeap": "",
 			"Tpl": "vendor/tpl/",
-			"": "app/_class/",
-			"App\\Admin\\Controller":"app/admin/controller",
-			"App\\Www\\Controller":"app/www/controller"
+			"Admin": "App",
+			"Www": "App",
+			"":"App/_Class",
+			"Yeap" : ""
 		}
 	},
 	"require": {
