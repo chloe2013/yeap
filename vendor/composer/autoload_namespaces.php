@@ -6,10 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Yeap' => array($baseDir . '/'),
+    'Yeap' => array($vendorDir . '/yeap'),
     'Www' => array($baseDir . '/App'),
     'Tpl' => array($vendorDir . '/tpl'),
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
+    'Monolog' => array($vendorDir . '/monolog/monolog/src'),
     'Doctrine\\ORM' => array($vendorDir . '/doctrine/orm/lib'),
     'Doctrine\\ODM\\MongoDB' => array($vendorDir . '/doctrine/mongodb-odm/lib'),
     'Doctrine\\MongoDB' => array($vendorDir . '/doctrine/mongodb/lib'),
