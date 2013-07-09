@@ -1,8 +1,8 @@
 <?php 
 
-namespace Yeap;
+namespace Yeap\Helper;
 
-Class Helper
+Class Validate
 {
 	public function __construct()
 	{

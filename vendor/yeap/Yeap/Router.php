@@ -3,6 +3,7 @@
 namespace Yeap;
 
 use Yeap\Config;
+use Yeap\Request;
 
 /**
  * 路由到控制器
@@ -40,14 +41,15 @@ Class Router
 	/**	
 	 * 构造函数
 	 */
-	public function __construct($path = '', Config $config)
+	public function __construct(Config $config)
 	{
-		$config->load('router');
-		$this->config = $config;
+		$config = Config::load('router');
+		
+		$path = trim(Request::getUrl(), '/');
 		
 		// set default path and controller
 		$this->path = DS;
-		$this->controller = $config->get('defaultController');
+		$this->controller = $config->defaultController;
 		
 		// set controller and method
 		if($path) {
@@ -83,11 +85,11 @@ Class Router
 		//require_once(CTLPATH . $this->path . $this->controller . EXT);
 		$path = str_replace('/', '\\', $this->path);
 		$controller = DOMAIN.'\\Controller'.$path.$this->controller;
-		$controller = new $controller($this->config);
+		$controller = new $controller();
 		
 		// 反射类
 		//$rc = new ReflectionClass('\\'.DOMAIN.'\\Controller'.$path.$this->controller);
-		//$controller = $rc->newInstance($this->config);
+		//$controller = $rc->newInstance();
 		
 		// 方法不存在时调用默认方法
 		if($this->method != self::DEFAULT_METHOD 
@@ -102,9 +104,8 @@ Class Router
 		$controller->view(rtrim($path, DS));
 		
 		// 设置模版里可能用到的参数
-		$controller->assign(array('config' => $this->config->items()));
+		$controller->assign(array('config' => Config::items()));
 		$controller->assign(array('url' => $path));
-		
 		
 		// 设置模版文件
 		$controller->layout('default');

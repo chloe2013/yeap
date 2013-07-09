@@ -9,10 +9,13 @@ Class Config
 	/**	
 	 * 初始化一些配置项
 	 */
-	private $database = array();
-	private $domain = '';
-	private $router = array();
-	private $defaultController = 'Index';
+	private static $setting = array(
+		'domain' => '',
+		'salt' => 'fu^&5fg$#ff', // 密码加密安全码
+		'database' => array(), // 数据库配置信息
+		'router' => array(), // 路由配置信息
+		'defaultController' => 'Index',
+	);
 	
 	/**
 	 * 构造函数
@@ -21,52 +24,65 @@ Class Config
 	public function __construct($file = '')
 	{
 		if($file) {
-			$this->load($file);
+			self::load($file);
 		}
+	}
+	
+	/**
+	 * get by key
+	 */
+	public function __get($key)
+	{
+		self::get($key);
 	}
 	
 	/**
 	 * 加载配置文件
 	 * 默认从web目录 加载 没有就加载通用的
 	 */
-	public function load($file = '')
+	public static function load($file = '')
 	{
-		$config = array();
-		$configFile = 	'/_Config/' . $file . EXT;
-		
-		// load app config
-		if(is_file(APPPATH . $configFile)) {
-			include(APPPATH . $configFile);
-		}
-		
-		// load web config
-		if(is_file(WEBPATH . $configFile)) {
-			include(WEBPATH . $configFile);
-		}
-		
-		// 把配置内容赋值给本类
-		foreach($config as $k => $v)
-		{
-			$this->$k = $v;
-		}
+		if($file) {
+			$config = array();
+			$configFile = 	'/_Config/' . $file . EXT;
+			
+			// load app config
+			if(is_file(APPPATH . $configFile)) {
+				include(APPPATH . $configFile);
+			}
+			
+			// load web config
+			if(is_file(WEBPATH . $configFile)) {
+				include(WEBPATH . $configFile);
+			}
+			
+			// 把配置内容赋值给本类
+			foreach($config as $k => $v)
+			{
+				self::$setting[$k] = $v;
+			}
+		}	
+		return new self;
 	}
 	
 	/**
-	 * 获取配置项
-	 * @param string $field
+	 * get item
 	 */
-	public function get($field)
+	public static function get($key)
 	{
-		return $this->$field;
+		if(isset(self::$setting[$key])) {
+			return self::$setting[$key];
+		}
+		return NULL;
 	}
 	
 	/**
 	 * get all config items
 	 * @return array
 	 */
-	public function items()
+	public static function items()
 	{
-		return get_object_vars($this);
+		return self::$setting;
 	}
 	
 }

@@ -15,6 +15,7 @@ namespace Yeap;
 use Yeap\View;
 use Yeap\Database;
 use Yeap\ORM;
+use Yeap\Request;
 
 abstract class Controller
 {
@@ -48,12 +49,14 @@ abstract class Controller
 	 */
 	private $title = '';
 	
+	protected static $input = NULL;
+	
 	/**
 	 * Set error handling and start session
 	 */
 	public function __construct()
 	{
-		
+		self::$input = new Request;
 	}
 	
 	/**
@@ -70,10 +73,20 @@ abstract class Controller
 	 */
 	public function output()
 	{
-		if($this->view)	{
+		// 直接输出	
+		if($this->view && ! Request::isPost()) {
 			$this->assign['title']	= $this->title;
 			$this->assign['breadcrumb']	= $this->breadcrumb;
 			echo new View($this->view, $this->layout, $this->assign);
+		} // ajax 输出 json or html
+		else if (Request::isAjax()) {
+			if(isset($this->assign['json'])) {
+				exit(json_encode($this->assign['json']));
+			} else if(isset($this->assign['html']))	{
+				exit($this->assign['html']);
+			}
+		} else {
+			// exit;
 		}
 	}
 	
@@ -108,7 +121,7 @@ abstract class Controller
 	 * set breadcrumb
 	 * @param string
 	 */
-	final public function bread($str)
+	public function bread($str)
 	{
 		$this->breadcrumb[] = $str;
 	}
@@ -117,7 +130,7 @@ abstract class Controller
 	 * set title for every page
 	 * @param string
 	 */
-	final public function title($title)
+	public function title($title)
 	{
 		$this->title = $title;
 	}

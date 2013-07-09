@@ -13,7 +13,7 @@ abstract Class Model extends ORM
 	
 	public function __construct()
 	{
-		
+		parent::__construct();
 	}
 	
 	/**
@@ -22,12 +22,11 @@ abstract Class Model extends ORM
 	 */
 	public static function entity()
 	{
-		$cfg = new Config('database');
 		$paths = array(
 			APPPATH . '_Class/Entity',
 		);
-		$config = Setup::createAnnotationMetadataConfiguration($paths, $cfg->get('dev_mode'));
-		$entity = EntityManager::create($cfg->get('database'), $config);
+		$config = Setup::createAnnotationMetadataConfiguration($paths, Config::get('dev_mode'));
+		$entity = EntityManager::create(Config::get('database'), $config);
 		return $entity;
 	}
 	
