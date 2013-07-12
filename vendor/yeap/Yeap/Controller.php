@@ -29,7 +29,7 @@ abstract class Controller
 	 * layout file
 	 * @var string
 	 */
-	private $layout = '';
+	private $layout = 'default';
 	
 	/**
 	 * assign data
@@ -48,6 +48,11 @@ abstract class Controller
 	 * @var string
 	 */
 	private $title = '';
+	
+	/**
+	 * output type view/json/html
+	 */
+	private $out_type = 'view';
 	
 	protected static $input = NULL;
 	
@@ -74,17 +79,16 @@ abstract class Controller
 	public function output()
 	{
 		// 直接输出	
-		if($this->view && ! Request::isPost()) {
+		if($this->out_type == 'view' && $this->view) {
 			$this->assign['title']	= $this->title;
 			$this->assign['breadcrumb']	= $this->breadcrumb;
 			echo new View($this->view, $this->layout, $this->assign);
-		} // ajax 输出 json or html
-		else if (Request::isAjax()) {
-			if(isset($this->assign['json'])) {
-				exit(json_encode($this->assign['json']));
-			} else if(isset($this->assign['html']))	{
-				exit($this->assign['html']);
-			}
+		} // ajax 输出 json
+		else if ($this->out_type == 'json' && isset($this->assign['json'])) {
+			exit(json_encode($this->assign['json']));
+		} // ajax 输出 html/text
+		else if(isset($this->assign[$this->out_type])) {
+			exit($this->assign[$this->out_type]);
 		} else {
 			// exit;
 		}
@@ -115,6 +119,7 @@ abstract class Controller
 	final public function view($file)
 	{
 		$this->view = $file;
+		$this->out_type = 'view';
 	}
 	
 	/**
@@ -133,6 +138,49 @@ abstract class Controller
 	public function title($title)
 	{
 		$this->title = $title;
+	}
+	
+	/**
+	 * set output type for output
+	 */
+	public function outJson()
+	{
+		$this->out_type = 'json';
+	}
+	
+	/**
+	 * before method
+	 */
+	public function before()
+	{
+		if(Request::isPost()) {
+			$this->out_type = 'none';
+		}
+		if(Request::isAjax()) {
+			$this->out_type = 'json';
+		}
+	}
+	
+	/**
+	 * 页面跳转
+	 */
+	public function jump($url)
+	{
+		if(strpos($url, 'http') !== 0)
+		{
+			$url = 'http://'.Config::get('base_domain').DS.rtrim($url, DS);
+		}
+		if(!headers_sent()) {
+			header("Location: {$url}");
+		} else { // If headers are sent... do java redirect... if java disabled, do html redirect.
+	        echo '<script type="text/javascript">';
+	        echo 'window.location.href="'.$url.'";';
+	        echo '</script>';
+	        echo '<noscript>';
+	        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+	        echo '</noscript>';
+    	}
+		exit;
 	}
 	
 	/**

@@ -54,7 +54,7 @@ class Database
 	public function __construct($name = '')
 	{
 		// Save config for connection
-		$cfg = Config::load('database');
+		$cfg = new Config('database');
 		$config = $cfg->database;
 		$current = $name && isset($config[$name]) ? $name : $cfg->active_db;
 		$this->config = $config[$current];

@@ -24,7 +24,7 @@ Class Config
 	public function __construct($file = '')
 	{
 		if($file) {
-			self::load($file);
+			$this->load($file);
 		}
 	}
 	
@@ -33,36 +33,34 @@ Class Config
 	 */
 	public function __get($key)
 	{
-		self::get($key);
+		return self::get($key);
 	}
 	
 	/**
 	 * 加载配置文件
 	 * 默认从web目录 加载 没有就加载通用的
 	 */
-	public static function load($file = '')
+	public function load($file)
 	{
-		if($file) {
-			$config = array();
-			$configFile = 	'/_Config/' . $file . EXT;
-			
-			// load app config
-			if(is_file(APPPATH . $configFile)) {
-				include(APPPATH . $configFile);
-			}
-			
-			// load web config
-			if(is_file(WEBPATH . $configFile)) {
-				include(WEBPATH . $configFile);
-			}
-			
-			// 把配置内容赋值给本类
-			foreach($config as $k => $v)
-			{
-				self::$setting[$k] = $v;
-			}
-		}	
-		return new self;
+		$config = array();
+		$configFile = 	'/_Config/' . $file . EXT;
+		
+		// load app config
+		if(is_file(APPPATH . $configFile)) {
+			include(APPPATH . $configFile);
+		}
+		
+		// load web config
+		if(is_file(WEBPATH . $configFile)) {
+			include(WEBPATH . $configFile);
+		}
+		
+		// 把配置内容赋值给本类
+		foreach($config as $k => $v)
+		{
+			self::$setting[$k] = $v;
+		}
+		return $this;
 	}
 	
 	/**

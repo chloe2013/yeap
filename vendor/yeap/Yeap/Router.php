@@ -36,15 +36,13 @@ Class Router
 	 */
 	private $path = '';
 	
-	private $config = NULL;
 	
 	/**	
 	 * 构造函数
 	 */
 	public function __construct(Config $config)
 	{
-		$config = Config::load('router');
-		
+		$config->load('router');
 		$path = trim(Request::getUrl(), '/');
 		
 		// set default path and controller
@@ -107,8 +105,8 @@ Class Router
 		$controller->assign(array('config' => Config::items()));
 		$controller->assign(array('url' => $path));
 		
-		// 设置模版文件
-		$controller->layout('default');
+		// 方法之前处理
+		$controller->before();
 		
 		// 调用controller 方法
 		if($this->param) {

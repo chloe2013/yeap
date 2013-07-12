@@ -19,8 +19,9 @@ Class Login extends Controller
 		if(parent::$input->isPost())	
 		{
 			$this->doLogin();
+			$this->jump();
 		}
-		$this->title('登录');	
+		$this->title('登录');
 		$this->layout('login');
 	}
 	
