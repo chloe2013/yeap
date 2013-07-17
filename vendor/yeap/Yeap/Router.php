@@ -96,14 +96,17 @@ Class Router
 			$this->method = self::DEFAULT_METHOD;
 		}
 		// url
-		$path = strtolower($this->path . $this->controller . DS . $this->method);
+		$path = strtolower($this->path . $this->controller . DS);
+		define('CPATH', $path);
+		$url = CPATH.strtolower($this->method);
 		
 		// 设置视图文件
-		$controller->view(rtrim($path, DS));
+		$controller->view(rtrim($url, DS));
 		
 		// 设置模版里可能用到的参数
 		$controller->assign('config', Config::items());
-		$controller->assign('url', $path);
+		$controller->assign('url', $url);
+		$controller->assign('path', $path);
 		
 		// 方法之前处理
 		$controller->before();

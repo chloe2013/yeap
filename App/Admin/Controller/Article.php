@@ -6,11 +6,10 @@ use Model\Article as MArticle;
 
 Class Article extends Controller
 {
-	const CPATH = '/article';	
 	public function __construct()
 	{
 		parent::__construct();
-		$this->bread('文章', self::CPATH);
+		$this->bread('文章', CPATH);
 	}
 	
 	/**	
@@ -21,14 +20,28 @@ Class Article extends Controller
 		$this->title('文章列表');
 		$fields = array('id' => 'ID', 'title' => '标题', 'published' => '状态');
 		$this->assign('fields', $fields);
+		$this->assign('ajax_url', 'json');
 	}
 	
+	/**
+	 * json data for lists
+	 */
 	public function json()
 	{
 		$article = new MArticle();
 		$lists = $article->limit(10)->find();
+		$data = array(
+			'sEcho' => 17,
+			'iTotalRecords' => 57,
+			'iTotalDisplayRecords' => 57,
+			'aaData' => $lists,
+		);
+		exit(json_encode($data));
 	}
 	
+	/**
+	 * edit
+	 */
 	public function edit($id = '')
 	{
 		if(parent::$input->isPost())	
@@ -44,7 +57,7 @@ Class Article extends Controller
 			$article->created = time();
 			$article->modified = time();
 			$article->save();
-			$this->jump(self::CPATH);
+			$this->jump(CPATH);
 		} else if($id) {
 			$article = new MArticle();
 			$lists = $article->find($id);

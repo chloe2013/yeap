@@ -61,7 +61,7 @@ $(document).ready(function(){
 				$('#content').fadeIn();
 				var newTitle = $(msg).filter('title').text();
 				$('title').text(newTitle);
-				docReady();
+				//docReady();
 			}
 		});
 	});

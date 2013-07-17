@@ -226,7 +226,9 @@
 		</footer>
 		
 	</div><!--/.fluid-container-->
-		
-		<script src="http://static.{config.domain}/js/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,jquery.dataTable.min.js,charisma.js,lists.js?v={=time()}"></script>
+		<script type="text/javascript">
+			var AjaxUrl = '{path}{ajax_url}';
+		</script>
+		<script src="http://static.{config.domain}/js/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,jquery.dataTables.min.js,charisma.js,lists.js?v={=time()}"></script>
 	</body>
 </html>
