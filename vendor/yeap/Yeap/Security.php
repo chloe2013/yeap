@@ -1,6 +1,7 @@
 <?php 
 
 namespace Yeap;
+
 use Yeap\Config;
 
 Class Security
@@ -65,7 +66,7 @@ Class Security
 	 */
 	public static function password($pwd)
 	{
-		return md5(crypt($pwd, substr($pwd, 0, 3)). Config::get('salt'));
+		return md5(md5($pwd.substr($pwd, 0, Config::get('crypt_length')).Config::get('crypt_salt')));
 	}
 	
 	/**

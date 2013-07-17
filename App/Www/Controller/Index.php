@@ -27,7 +27,7 @@ Class Index extends Controller
 			exit;
 		}
 		$this->layout('blank');
-		$this->assign(array('content' => 'hello world!'));
+		$this->assign('content',  'hello world!');
 	}
 	
 }

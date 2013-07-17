@@ -18,22 +18,23 @@ Class Login extends Controller
 	{
 		if(parent::$input->isPost())	
 		{
-			$this->doLogin();
-			$this->jump();
+			$admin = new Admin();
+			$admin->login(parent::$input->post('uid'), parent::$input->post('password'));
+			$this->jump('/');
 		}
 		$this->title('登录');
 		$this->layout('login');
 	}
 	
 	/**
-	 * 登陆执行
+	 * logOut
 	 */
-	private function doLogin()
+	public function out()
 	{
 		$admin = new Admin();
-		$admin->login(parent::$input->post('uid'), parent::$input->post('pwd'));
+		$admin->logout();
+		$this->jump('/login');
 	}
-	
 }
 
 // End;

@@ -12,8 +12,6 @@
 	},
 	"require": {
         "php": ">=5.3.3",
-        "doctrine/orm": "2.*",
-        "doctrine/mongodb-odm": "1.0.0-BETA8",
         "psr/log": "dev-master",
         "monolog/monolog": "1.*"
     },

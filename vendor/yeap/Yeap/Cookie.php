@@ -7,7 +7,19 @@ use Yeap\Security;
 
 Class Cookie
 {
-	public static $settings = array();
+	private static $settings = array();
+	
+	/**
+	 * set default setting
+	 */
+	public static function init($config = array())
+	{
+		if(!self::$settings)
+		{
+			self::$settings = Config::get('cookie');
+		}
+		return $config ? array_merge(self::$settings, $config) : self::$settings;
+	}
 	
 	/**
 	 * Decrypt and fetch cookie data
@@ -16,20 +28,19 @@ Class Cookie
 	 * @param array $config settings
 	 * @return mixed
 	 */
-	public static function get($name, $config = NULL)
+	public static function get($name, $config = array())
 	{
-		// Use default config settings if needed
-		$config = $config ?: static::$settings;
-
+		$config = self::init($config);	
+		$name = Config::get('cookie_prefix').$name;
 		if(isset($_COOKIE[$name]))
 		{
 			// Decrypt cookie using cookie key
-			if($v = json_decode(Security::decrypt(base64_decode($_COOKIE[$name]), $config['key'])))
+			if($v = json_decode(Security::decrypt(base64_decode($_COOKIE[$name]), Config::get('cookie_salt')), TRUE))
 			{
 				// Has the cookie expired?
-				if($v[0] < $config['timeout'])
+				if((time() - $v['last_update']) < $config['expired'] * 3600)
 				{
-					return is_scalar($v[1])?$v[1]:(array)$v[1];
+					return is_scalar($v) ? $v : (array)$v;
 				}
 			}
 		}
@@ -46,15 +57,15 @@ Class Cookie
 	 * @param array $config settings
 	 * return boolean
 	 */
-	public static function set($name, $value = array(), $config = NULL)
+	public static function set($name, $value = array(), $config = array())
 	{
-		// Use default config settings if needed
-		extract($config ?: static::$settings);
+		$config = self::init($config);	
+		extract($config);
 		$value['last_update'] = time();
+		$name = Config::get('cookie_prefix').$name;
 		// If the cookie is being removed we want it left blank
 		$value = $value ? base64_encode(Security::encrypt(json_encode($value), Config::get('cookie_salt'))) : '';
-
 		// Save cookie to user agent
-		setcookie($name, $value, $expires, $path, $domain, $secure, $httponly);
+		setcookie($name, $value, time() + $expired * 3600, $path, $domain, $secure, $httponly);
 	}
 }

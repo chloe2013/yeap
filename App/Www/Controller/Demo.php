@@ -15,12 +15,12 @@ Class Demo extends Controller
 		$user = new User();
 		$user->add();
 		
-		$this->assign(array('test' => ' i am demo page'));
+		$this->assign('test', ' i am demo page');
 	}
 	
 	public function sub()
 	{
-		$this->assign(array('test' => ' i am demo sub page'));
+		$this->assign('test', ' i am demo sub page');
 	}
 	
 }

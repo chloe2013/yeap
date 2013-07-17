@@ -102,8 +102,8 @@ Class Router
 		$controller->view(rtrim($path, DS));
 		
 		// 设置模版里可能用到的参数
-		$controller->assign(array('config' => Config::items()));
-		$controller->assign(array('url' => $path));
+		$controller->assign('config', Config::items());
+		$controller->assign('url', $path);
 		
 		// 方法之前处理
 		$controller->before();

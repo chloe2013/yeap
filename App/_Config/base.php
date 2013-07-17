@@ -14,10 +14,11 @@ $config['crypt_length']		= 3;
 /**
  * cookie
  */
-$config['cookie_name']		= 'ye_fjfukgf';
-$config['cookie_prefix']	= 'ye_';
-$config['cookie_expired']	= 24; // hours
-$config['cookie_domain']	= '.'.$config['domain'];
-$config['cookie_path']		= "/";
-$config['cookie_salt']		= "frjg&5fg*$@uti@j";
-$config['cookie_secure']	= FALSE;
+$config['cookie'] = array();
+$config['cookie']['expired']	= 24; // hours
+$config['cookie']['domain']		= '.'.$config['domain'];
+$config['cookie']['path']		= "/";
+$config['cookie']['secure']		= FALSE;
+$config['cookie']['httponly']	= FALSE;
+$config['cookie_salt']			= "frjg&5fg*$@uti@j";
+$config['cookie_prefix']		= "ye_"; // name 前缀

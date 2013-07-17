@@ -35,7 +35,7 @@ abstract class Controller
 	 * assign data
 	 * @var array
 	 */
-	private $assign = array();
+	protected $assign = array();
 	
 	/**
 	 * breadcrumb
@@ -96,13 +96,12 @@ abstract class Controller
 	
 	/**
 	 * 赋值数组
-	 * @param array
+	 * @param string $key
+	 * @param string $value
 	 */
-	final public function assign($data = array())
+	final public function assign($key, $value)
 	{
-		if($data) {
-			$this->assign = array_merge($this->assign, $data);
-		}	
+		$this->assign[$key] = $value;
 	}
 	
 	/**
@@ -119,16 +118,18 @@ abstract class Controller
 	final public function view($file)
 	{
 		$this->view = $file;
-		$this->out_type = 'view';
+		if($file) {
+			$this->out_type = 'view';
+		}
 	}
 	
 	/**
 	 * set breadcrumb
 	 * @param string
 	 */
-	public function bread($str)
+	public function bread($str, $url)
 	{
-		$this->breadcrumb[] = $str;
+		$this->breadcrumb[] = array('title' => $str, 'url' => $url);
 	}
 	
 	/**
@@ -168,7 +169,7 @@ abstract class Controller
 	{
 		if(strpos($url, 'http') !== 0)
 		{
-			$url = 'http://'.Config::get('base_domain').DS.rtrim($url, DS);
+			$url = 'http://'.Config::get('base_domain').DS.trim($url, DS);
 		}
 		if(!headers_sent()) {
 			header("Location: {$url}");

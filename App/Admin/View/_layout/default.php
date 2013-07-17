@@ -12,7 +12,7 @@
 		delete these references -->
 		<link rel="shortcut icon" href="http://static.{config.domain}/img/favicon.ico" />
 		<link rel="apple-touch-icon" href="http://static.{config.domain}/apple-touch-icon.png" />
-		<link href="http://static.{config.domain}/css/??bootstrap.css,jquery-ui.css,plugin.css" rel="stylesheet" media="screen">
+		<link href="http://static.{config.domain}/css/??bootstrap.css,jquery-ui.css,plugin.css?v={=time()}" rel="stylesheet" media="screen">
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -53,13 +53,13 @@
 				<!-- user dropdown starts -->
 				<div class="btn-group pull-right" >
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="icon-user"></i><span class="hidden-phone"> admin</span>
+						<i class="icon-user"></i><span class="hidden-phone"> {login.uid}</span>
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Profile</a></li>
 						<li class="divider"></li>
-						<li><a href="login.html">Logout</a></li>
+						<li><a href="/login/out">Logout</a></li>
 					</ul>
 				</div>
 				<!-- user dropdown ends -->
@@ -125,7 +125,7 @@
 					</li>
 					{@breadcrumb}
 					<li>
-						<a href="#">{.value_}</a> <span class="divider">/</span>
+						<a href="{.url}">{.title}</a> <span class="divider">/</span>
 					</li>
 					{/}
 					 {title}
@@ -143,16 +143,66 @@
 						</div>
 					</div>
 					<div class="box-content">
-						{#view}
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						  <thead>
+							  <tr>
+								  {@fields}
+								  <th>{.value_}</th>
+								  {/}
+								  <th class="last"><input type="checkbox" value="" name="checkAll"></th>
+							  </tr>
+						  </thead>   
+						  <tbody>
+							<tr>
+								{@lists}
+									{@fields}
+									<td><span class="{?.label}label label-{.label}{/}">David R</span></td>
+									{/}
+								{/}
+								<td class="center">2012/01/01</td>
+								<td class="center">Member</td>
+								<td class="center">
+									<span class="label label-success">Active</span>
+								</td>
+								<td class="center">
+									<a class="btn btn-success" href="#">
+										<i class="icon-zoom-in icon-white"></i>  
+										View                                            
+									</a>
+									<a class="btn btn-info" href="#">
+										<i class="icon-edit icon-white"></i>  
+										Edit                                            
+									</a>
+									<a class="btn btn-danger" href="#">
+										<i class="icon-trash icon-white"></i> 
+										Delete
+									</a>
+								</td>
+							</tr>
+						</tbody>
+						</table>
+						
+						<div class="pagination pagination-centered">
+						  <ul>
+							<li><a href="#">Prev</a></li>
+							<li class="active">
+							  <a href="#">1</a>
+							</li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">Next</a></li>
+						  </ul>
+						</div>  
 					</div>
 				</div><!--/span-->
 			
 			</div><!--/row-->
 
     
-					<!-- content ends -->
+			<!-- content ends -->
 			</div><!--/#content.span10-->
-				</div><!--/fluid-row-->
+		</div><!--/fluid-row-->
 				
 		<hr>
 
@@ -177,6 +227,6 @@
 		
 	</div><!--/.fluid-container-->
 		
-		<script src="http://static.{config.domain}/js/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,chart.js,charisma.js"></script>
+		<script src="http://static.{config.domain}/js/??jquery.min.js,jquery-ui.custom.min.js,bootstrap.js,plugin.js,jquery.dataTable.min.js,charisma.js,lists.js?v={=time()}"></script>
 	</body>
 </html>

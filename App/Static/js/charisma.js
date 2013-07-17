@@ -92,7 +92,7 @@ $(document).ready(function(){
 	});
 	
 	//other things to do on document ready, seperated for ajax calls
-	docReady();
+	//docReady();
 });
 		
 		
