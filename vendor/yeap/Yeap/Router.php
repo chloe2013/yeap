@@ -83,6 +83,12 @@ Class Router
 		//require_once(CTLPATH . $this->path . $this->controller . EXT);
 		$path = str_replace('/', '\\', $this->path);
 		$controller = DOMAIN.'\\Controller'.$path.$this->controller;
+		
+		// url
+		$path = strtolower($this->path . $this->controller . DS);
+		define('CPATH', $path);
+		
+		// controller
 		$controller = new $controller();
 		
 		// 反射类
@@ -95,9 +101,7 @@ Class Router
 			array_unshift($this->param, $this->method);
 			$this->method = self::DEFAULT_METHOD;
 		}
-		// url
-		$path = strtolower($this->path . $this->controller . DS);
-		define('CPATH', $path);
+		
 		$url = CPATH.strtolower($this->method);
 		
 		// 设置视图文件

@@ -29,9 +29,13 @@ Class Article extends Controller
 	public function json()
 	{
 		$article = new MArticle();
-		$lists = $article->limit(10)->find();
+		$article = $article->limit(parent::$input->post('iDisplayStart'), parent::$input->post('iDisplayLength'));
+		if(parent::$input->post('sSearch')) {
+			$article->where('title', 'like', '%'.parent::$input->post('sSearch').'%');
+		}
+		$lists = $article->find();
 		$data = array(
-			'sEcho' => 17,
+			'sEcho' => parent::$input->post('sEcho'),
 			'iTotalRecords' => 57,
 			'iTotalDisplayRecords' => 57,
 			'aaData' => $lists,

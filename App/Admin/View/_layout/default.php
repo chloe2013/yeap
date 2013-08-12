@@ -154,58 +154,20 @@
 						  </thead>   
 						  <tbody>
 							<tr>
-								{@lists}
-									{@fields}
-									<td><span class="{?.label}label label-{.label}{/}">David R</span></td>
-									{/}
-								{/}
-								<td class="center">2012/01/01</td>
-								<td class="center">Member</td>
-								<td class="center">
-									<span class="label label-success">Active</span>
-								</td>
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="icon-zoom-in icon-white"></i>  
-										View                                            
-									</a>
-									<a class="btn btn-info" href="#">
-										<i class="icon-edit icon-white"></i>  
-										Edit                                            
-									</a>
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash icon-white"></i> 
-										Delete
-									</a>
-								</td>
+								<td colspan="100" class="dataTables_empty center">数据加载中...</td>
 							</tr>
 						</tbody>
 						</table>
-						
-						<div class="pagination pagination-centered">
-						  <ul>
-							<li><a href="#">Prev</a></li>
-							<li class="active">
-							  <a href="#">1</a>
-							</li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">Next</a></li>
-						  </ul>
-						</div>  
 					</div>
 				</div><!--/span-->
-			
 			</div><!--/row-->
 
-    
 			<!-- content ends -->
 			</div><!--/#content.span10-->
 		</div><!--/fluid-row-->
 				
 		<hr>
-
+		{# view}
 		<div class="modal hide fade" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
