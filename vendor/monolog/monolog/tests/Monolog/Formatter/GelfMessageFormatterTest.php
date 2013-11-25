@@ -47,7 +47,7 @@ class GelfMessageFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('meh', $message->getFacility());
         $this->assertEquals(null, $message->getLine());
         $this->assertEquals(null, $message->getFile());
-        $this->assertEquals(LOG_ERR, $message->getLevel());
+        $this->assertEquals(3, $message->getLevel());
         $this->assertNotEmpty($message->getHost());
 
         $formatter = new GelfMessageFormatter('mysystem');
@@ -116,6 +116,35 @@ class GelfMessageFormatterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('_CTXfrom', $message_array);
         $this->assertEquals('logger', $message_array['_CTXfrom']);
+
+    }
+
+    /**
+     * @covers Monolog\Formatter\GelfMessageFormatter::format
+     */
+    public function testFormatWithContextContainingException()
+    {
+        $formatter = new GelfMessageFormatter();
+        $record = array(
+            'level' => Logger::ERROR,
+            'level_name' => 'ERROR',
+            'channel' => 'meh',
+            'context' => array('from' => 'logger', 'exception' => array(
+                'class' => '\Exception',
+                'file'  => '/some/file/in/dir.php:56',
+                'trace' => array('/some/file/1.php:23', '/some/file/2.php:3')
+            )),
+            'datetime' => new \DateTime("@0"),
+            'extra' => array(),
+            'message' => 'log'
+        );
+
+        $message = $formatter->format($record);
+
+        $this->assertInstanceOf('Gelf\Message', $message);
+
+        $this->assertEquals("/some/file/in/dir.php", $message->getFile());
+        $this->assertEquals("56", $message->getLine());
 
     }
 

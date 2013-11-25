@@ -117,12 +117,7 @@ $(document).ready(function(){
 		"bServerSide": true,
 		"sAjaxSource": AjaxUrl,
 		"sServerMethod": "POST",
-		"aoColumns": [
-            { "mDataProp": "id" },
-            { "mDataProp": "title" },
-            { "mDataProp": "published" },
-            { "mDataProp": "" }
-        ],
+		"aoColumns": listsField,
         "fnServerParams": function(aoData) {
         	
         }

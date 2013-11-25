@@ -2,71 +2,57 @@
 namespace Admin\Controller;
 
 use Admin\Core\Controller;
-use Model\Article as MArticle;
 
 Class Article extends Controller
 {
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct('Model\Article');
 		$this->bread('文章', CPATH);
 	}
 	
-	/**	
-	 * 列表
-	 */
-	public function index()
-	{
-		$this->title('文章列表');
-		$fields = array('id' => 'ID', 'title' => '标题', 'published' => '状态');
-		$this->assign('fields', $fields);
-		$this->assign('ajax_url', 'json');
-	}
-	
 	/**
-	 * json data for lists
+	 * 列表字段
 	 */
-	public function json()
+	protected static function listsFields()
 	{
-		$article = new MArticle();
-		$article = $article->limit(parent::$input->post('iDisplayStart'), parent::$input->post('iDisplayLength'));
-		if(parent::$input->post('sSearch')) {
-			$article->where('title', 'like', '%'.parent::$input->post('sSearch').'%');
-		}
-		$lists = $article->find();
-		$data = array(
-			'sEcho' => parent::$input->post('sEcho'),
-			'iTotalRecords' => 57,
-			'iTotalDisplayRecords' => 57,
-			'aaData' => $lists,
+		return array(
+			'id' => 'ID', 
+			'cate_id' => '分类', 
+			'title' => '标题', 
+			'identifier' => '别名', 
+			'published' => '状态',
+			'modified' => '更新时间',
+			'created' => '创建时间',
 		);
-		exit(json_encode($data));
 	}
 	
 	/**
-	 * edit
+	 * 搜索过滤
 	 */
-	public function edit($id = '')
+	protected function listSearch()
 	{
-		if(parent::$input->isPost())	
-		{
-			$article = new MArticle();	
-			$article->id = 5;
-			$article->cate_id = 'test';
-			$article->identifier = 'test2';
-			$article->published = md5('123456');
-			$article->title = 4;
-			$article->keyword = 4;
-			$article->body = 4;
-			$article->created = time();
-			$article->modified = time();
-			$article->save();
-			$this->jump(CPATH);
-		} else if($id) {
-			$article = new MArticle();
-			$lists = $article->find($id);
-			$this->assign('article', $lists);
-		}
+		if(parent::$input->post('sSearch')) {
+			$this->model->where('title', 'like', '%'.parent::$input->post('sSearch').'%');
+		}	
+	}
+	
+	/**
+	 * 编辑提交
+	 */
+	protected function editProc()
+	{
+		$article = new MArticle();	
+		$article->id = parent::$input->post('id');
+		$article->cate_id = parent::$input->post('cate_id');
+		$article->identifier = parent::$input->post('identifier');
+		$article->published = parent::$input->post('published');
+		$article->title = parent::$input->post('title');
+		$article->keyword = parent::$input->post('keyword');
+		$article->body = parent::$input->post('body');
+		$article->created = time();
+		$article->modified = time();
+		$article->save();
 	}
 	
 }

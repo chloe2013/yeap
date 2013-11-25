@@ -97,7 +97,8 @@ Class Router
 		
 		// 方法不存在时调用默认方法
 		if($this->method != self::DEFAULT_METHOD 
-			&& !method_exists($controller, $this->method)) {
+			&& (!is_callable(array($controller, $this->method)) 
+				|| in_array($this->method, array('Before', 'Output', 'View', 'Assign', 'Layout'))) ) {
 			array_unshift($this->param, $this->method);
 			$this->method = self::DEFAULT_METHOD;
 		}

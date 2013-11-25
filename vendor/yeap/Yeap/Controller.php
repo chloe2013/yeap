@@ -52,7 +52,7 @@ abstract class Controller
 	/**
 	 * output type view/json/html
 	 */
-	private $out_type = 'view';
+	protected $out_type = 'view';
 	
 	protected static $input = NULL;
 	
@@ -76,7 +76,7 @@ abstract class Controller
 	 * Called after the controller method is output the response
 	 * 输出数据
 	 */
-	public function output()
+	final public function output()
 	{
 		// 直接输出	
 		if($this->out_type == 'view' && $this->view) {
@@ -127,7 +127,7 @@ abstract class Controller
 	 * set breadcrumb
 	 * @param string
 	 */
-	public function bread($str, $url)
+	protected function bread($str, $url)
 	{
 		$this->breadcrumb[] = array('title' => $str, 'url' => $url);
 	}
@@ -136,7 +136,7 @@ abstract class Controller
 	 * set title for every page
 	 * @param string
 	 */
-	public function title($title)
+	protected function title($title)
 	{
 		$this->title = $title;
 	}
@@ -144,7 +144,7 @@ abstract class Controller
 	/**
 	 * set output type for output
 	 */
-	public function outJson()
+	protected function outJson()
 	{
 		$this->out_type = 'json';
 	}
@@ -152,7 +152,7 @@ abstract class Controller
 	/**
 	 * before method
 	 */
-	public function before()
+	protected function before()
 	{
 		if(Request::isPost()) {
 			$this->out_type = 'none';
@@ -165,7 +165,7 @@ abstract class Controller
 	/**
 	 * 页面跳转
 	 */
-	public function jump($url)
+	protected function jump($url)
 	{
 		if(strpos($url, 'http') !== 0)
 		{
@@ -188,7 +188,7 @@ abstract class Controller
 	 * load a db
 	 * @param string $name
 	 */
-	public function loadDb($name = '')
+	protected function loadDb($name = '')
 	{
 		$db = new Database($name);
 		ORM::db($db);

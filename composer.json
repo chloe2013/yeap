@@ -3,16 +3,16 @@
 	"description": "a mirco framework",
 	"autoload": {
 		"psr-0": {
-			"Tpl": "vendor/tpl/",
+			"Yeap" : "vendor/yeap/",
+			"":"App/_Class",
 			"Admin": "App",
 			"Www": "App",
-			"":"App/_Class",
-			"Yeap" : "vendor/yeap/"
+			"Tpl": "vendor/tpl/",
+			"PhpRbac": "vendor/rbac/"
 		}
 	},
 	"require": {
         "php": ">=5.3.3",
-        "psr/log": "dev-master",
         "monolog/monolog": "1.*"
     },
     "require-dev": {
