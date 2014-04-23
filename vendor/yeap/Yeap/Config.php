@@ -43,11 +43,11 @@ Class Config
 	public function load($file)
 	{
 		$config = array();
-		$configFile = 	'/_Config/' . $file . EXT;
+		$configFile = 	'/config/' . $file . EXT;
 		
 		// load app config
-		if(is_file(APPPATH . $configFile)) {
-			include(APPPATH . $configFile);
+		if(is_file(PROJECTPATH . $configFile)) {
+			include(PROJECTPATH . $configFile);
 		}
 		
 		// load web config

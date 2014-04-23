@@ -15,6 +15,7 @@ use Yeap\Config;
 use Yeap\Router;
 use Yeap\Exception\YeapException;
 use \Exception;
+use \Composer\Autoload\ClassLoader;
 
 // The PHP file extension
 define('EXT', '.php');
@@ -32,7 +33,15 @@ Class Base
 	public function display()
 	{
 		try {
+			// load controller namespaces	
+			$loader = new ClassLoader();
+			$loader->add('', CTLPATH);
+			$loader->register();
+			
+			// load config	
 			$config = new Config('base');
+			
+			// router url to controller
 			$router = new Router($config);
 			$router->load();
 		}	
@@ -40,8 +49,6 @@ Class Base
 			// todo error handler	
 			echo $e->getMessage();die;
 		}
-		
-		self::debugEnd();
 	}
 	
 	public static function debugStart()

@@ -59,7 +59,7 @@ Class Router
 			for($i = $len - 1; $i >= 0; $i--) {
 				$tmp = implode(DS, array_slice($paths, 0, $i)) . DS;
 				$controller = $paths[$i];
-				if($paths && is_file(CTLPATH . $tmp . $controller . EXT)) {
+				if($paths && is_file(CTLPATH . $tmp . $controller.'Controller' . EXT)) {
 					if(isset($paths[$i+1]))
 					{
 						$this->method = $paths[$i+1];
@@ -82,7 +82,7 @@ Class Router
 	{
 		//require_once(CTLPATH . $this->path . $this->controller . EXT);
 		$path = str_replace('/', '\\', $this->path);
-		$controller = DOMAIN.'\\Controller'.$path.$this->controller;
+		$controller = $path.$this->controller.'Controller';
 		
 		// url
 		$path = strtolower($this->path . $this->controller . DS);
@@ -114,7 +114,7 @@ Class Router
 		$controller->assign('path', $path);
 		
 		// 方法之前处理
-		$controller->before();
+		//$controller->before();
 		
 		// 调用controller 方法
 		if($this->param) {
