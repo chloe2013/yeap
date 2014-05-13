@@ -73,10 +73,10 @@ Class BaseController extends Controller
 	{
 		$this->title('列表');
 		$fields = $this->listsFields();
-		$aoColumns = array();
+		$aoColumns = array(array('mDataProp' => 'id', 'sClass' => 'center'));
 		foreach($fields as $k => $v)
 		{
-			$aoColumns[] = array('mDataProp' => $k);
+			$aoColumns[] = array('mDataProp' => $k, 'sClass' => 'center');
 		}
 		$this->assign('fields', $fields);
 		$this->assign('lists_fields', $aoColumns);
@@ -84,19 +84,24 @@ Class BaseController extends Controller
 	}
 	
 	/**
-	 * 列表页
+	 * 列表页 for datatables
 	 */
 	public function json()
 	{
 		$this->model();
-		$this->model = $this->model->limit(parent::$input->post('iDisplayStart'), parent::$input->post('iDisplayLength'));
+		
+		$start = (int)parent::$input->post('iDisplayStart');
+		$len = (int)parent::$input->post('iDisplayLength');
+		$page = ceil($start/$len);
+		
+		$this->model = $this->model->limit($start, $len);
 		$this->listSearch();
 		$this->model->field(array_keys(self::listsFields()));
 		$lists = $this->model->find();
-		
+		$total = $this->model->count();
 		$data = array(
 			'sEcho' => parent::$input->post('sEcho'),
-			'iTotalRecords' => $this->model->count(),
+			'iTotalRecords' => $total,
 			'iTotalDisplayRecords' => count($lists),
 			'aaData' => $lists,
 		);
@@ -108,7 +113,8 @@ Class BaseController extends Controller
 	 */
 	public function edit($id = '')
 	{
-		$this->title('新增');	
+		$this->title('新增');
+		
 		if(parent::$input->isPost())	
 		{
 			$this->editProc();
@@ -119,6 +125,7 @@ Class BaseController extends Controller
 			$lists = $this->model->find($id);
 			$this->assign('data', $lists);
 		}
+		$this->assign('fields', $this->editFields());
 		$this->layout('form');
 	}
 	
@@ -136,6 +143,15 @@ Class BaseController extends Controller
 	 * 列表字段
 	 */
 	protected static function listsFields()
+	{
+		return array();
+	}
+	
+	/**
+	 * 编辑字段
+	 * array(n=>name, w=>width, f=>field, c=>class, s=>search)
+	 */
+	protected static function editFields()
 	{
 		return array();
 	}

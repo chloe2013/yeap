@@ -14,13 +14,28 @@ Class ArticleController extends BaseController
 	protected static function listsFields()
 	{
 		return array(
-			'id' => 'ID', 
-			'cate_id' => '分类', 
-			'title' => '标题', 
-			'identifier' => '别名', 
-			'published' => '状态',
-			'modified' => '更新时间',
-			'created' => '创建时间',
+			'id' => array('n' => 'ID',), 
+			'cate_id' => array('n' => '分类'), 
+			'title' => array('n' => '标题'), 
+			'identifier' => array('n' => '别名'),  
+			'published' => array('n' => '状态'), 
+			'modified' => array('n' => '更新时间'), 
+			'created' => array('n' => '创建时间'), 
+		);
+	}
+	
+	/**
+	 * 编辑字段
+	 */
+	protected static function editFields()
+	{
+		return array(
+			array('name' => 'id', 'title' => 'ID', 'type' => 'input', 'itype' => 'hidden'),
+			array('name' => 'title', 'title' => '标题', 'type' => 'input'),
+			array('name' => 'identifier', 'title' => '别名', 'type' => 'input', 'tip' => '英文,seo地址用'),
+			array('name' => 'cate_id', 'title' => '分类', 'type' => 'select'),
+			array('name' => 'published', 'title' => '激活状态', 'type' => 'switch'),
+			array('name' => 'body', 'title' => '内容', 'type' => 'textarea'),
 		);
 	}
 	
@@ -39,11 +54,11 @@ Class ArticleController extends BaseController
 	 */
 	protected function editProc()
 	{
-		$article = new MArticle();	
-		$article->id = parent::$input->post('id');
-		$article->cate_id = parent::$input->post('cate_id');
+		$article = new $this->model;
+		$article->id = (int)parent::$input->post('id');
+		$article->cate_id = (int)parent::$input->post('cate_id');
 		$article->identifier = parent::$input->post('identifier');
-		$article->published = parent::$input->post('published');
+		$article->published = parent::$input->post('published') === 'on' ? 1 : 0;
 		$article->title = parent::$input->post('title');
 		$article->keyword = parent::$input->post('keyword');
 		$article->body = parent::$input->post('body');

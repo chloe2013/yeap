@@ -1,98 +1,5 @@
-//additional functions for data table
-$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-{
-	return {
-		"iStart":         oSettings._iDisplayStart,
-		"iEnd":           oSettings.fnDisplayEnd(),
-		"iLength":        oSettings._iDisplayLength,
-		"iTotal":         oSettings.fnRecordsTotal(),
-		"iFilteredTotal": oSettings.fnRecordsDisplay(),
-		"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-		"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-	};
-}
-$.extend( $.fn.dataTableExt.oPagination, {
-	"bootstrap": {
-		"fnInit": function( oSettings, nPaging, fnDraw ) {
-			var oLang = oSettings.oLanguage.oPaginate;
-			var fnClickHandler = function ( e ) {
-				e.preventDefault();
-				if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-					fnDraw( oSettings );
-				}
-			};
-
-			$(nPaging).addClass('pagination').append(
-				'<ul>'+
-					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-				'</ul>'
-			);
-			var els = $('a', nPaging);
-			$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-			$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
-		},
-
-		"fnUpdate": function ( oSettings, fnDraw ) {
-			var iListLength = 5;
-			var oPaging = oSettings.oInstance.fnPagingInfo();
-			var an = oSettings.aanFeatures.p;
-			var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
-
-			if ( oPaging.iTotalPages < iListLength) {
-				iStart = 1;
-				iEnd = oPaging.iTotalPages;
-			}
-			else if ( oPaging.iPage <= iHalf ) {
-				iStart = 1;
-				iEnd = iListLength;
-			} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
-				iStart = oPaging.iTotalPages - iListLength + 1;
-				iEnd = oPaging.iTotalPages;
-			} else {
-				iStart = oPaging.iPage - iHalf + 1;
-				iEnd = iStart + iListLength - 1;
-			}
-
-			for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
-				// remove the middle elements
-				$('li:gt(0)', an[i]).filter(':not(:last)').remove();
-
-				// add the new list items and their event handlers
-				for ( j=iStart ; j<=iEnd ; j++ ) {
-					sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
-					$('<li '+sClass+'><a href="#">'+j+'</a></li>')
-						.insertBefore( $('li:last', an[i])[0] )
-						.bind('click', function (e) {
-							e.preventDefault();
-							oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
-							fnDraw( oSettings );
-						} );
-				}
-
-				// add / remove disabled classes from the static elements
-				if ( oPaging.iPage === 0 ) {
-					$('li:first', an[i]).addClass('disabled');
-				} else {
-					$('li:first', an[i]).removeClass('disabled');
-				}
-
-				if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
-					$('li:last', an[i]).addClass('disabled');
-				} else {
-					$('li:last', an[i]).removeClass('disabled');
-				}
-			}
-		}
-	}
-});
-
-$(document).ready(function(){
-	
-	//datatable
-	var listsTable = $('.datatable').dataTable({
-		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
-		"sPaginationType": "bootstrap",
+jQuery(function($) {
+	var oTable = $('#listsTable').dataTable({
 		"oLanguage": {
 			//"sUrl": "media/language/de_DE.txt"， //语言包 文件格式和上面一样
 			"sSearch": "搜索:",
@@ -109,33 +16,58 @@ $(document).ready(function(){
 		},
 		"bStateSave": true,	//保存状态到cookie
 		"bLengthChange": true,	//是否启用设置每页显示记录数
-		"iDisplayLength": 20,	//默认每页显示的记录数
+		"iDisplayLength": 15,	//默认每页显示的记录数
 		// "sScrollY": 200,//竖向滚动条 tbody区域的高度
 		"bAutoWidth": true, //列的宽度会根据table的宽度自适应
+		"aLengthMenu": [15, 20, 30, 50],  //设置每页显示记录的下拉菜单
 		"bSort": true, //是否使用排序
-		"bProcessing": true,
+		//"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": AjaxUrl,
 		"sServerMethod": "POST",
 		"aoColumns": listsField,
+		"aoColumnDefs": [
+		    {
+		        "mRender": function ( data, type, row ) {
+		            return '<label><input type="checkbox" value="'+ row[0] +'" name="checkAll" class="ace" /></label>';
+		        },
+		        "aTargets": [ 0 ]
+		    }
+		],
         "fnServerParams": function(aoData) {
-        	
+        },
+        "oTableTools": {
+            "sRowSelect": "multi",
+            "aButtons": [
+               // { "sExtends": "editor_edit",   "editor": editor },
+                //{ "sExtends": "editor_remove", "editor": editor }
+            ]
         }
 	});
-		
-	$('.btn-close').click(function(e){
-		e.preventDefault();
-		$(this).parent().parent().parent().fadeOut();
+	
+	
+	$('table th input:checkbox').on('click' , function(){
+		var that = this;
+		$(this).closest('table').find('tr > td:first-child input:checkbox')
+		.each(function(){
+			this.checked = that.checked;
+			$(this).closest('tr').toggleClass('selected');
+		});
+			
 	});
-	$('.btn-minimize').click(function(e){
-		e.preventDefault();
-		var $target = $(this).parent().parent().next('.box-content');
-		if($target.is(':visible')) $('i',$(this)).removeClass('icon-chevron-up').addClass('icon-chevron-down');
-		else 					   $('i',$(this)).removeClass('icon-chevron-down').addClass('icon-chevron-up');
-		$target.slideToggle();
-	});
-	$('.btn-setting').click(function(e){
-		e.preventDefault();
-		$('#myModal').modal('show');
-	});
+
+
+	$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+	function tooltip_placement(context, source) {
+		var $source = $(source);
+		var $parent = $source.closest('table')
+		var off1 = $parent.offset();
+		var w1 = $parent.width();
+
+		var off2 = $source.offset();
+		var w2 = $source.width();
+
+		if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+		return 'left';
+	}
 });

@@ -1,5 +1,7 @@
 <?php
 
+use Yeap\Security;
+
 Class AdminController extends BaseController
 {
 	public function __construct()
@@ -14,12 +16,29 @@ Class AdminController extends BaseController
 	protected static function listsFields()
 	{
 		return array(
-			'id' => 'ID', 
-			'uid' => '用户名', 
-			'name' => '姓名', 
-			'email' => '邮箱', 
-			'tel' => '电话',
-			'created' => '创建时间',
+			'id' => array('n' => 'ID'),  
+			'uid' => array('n' => '用户名'),  
+			'name' => array('n' => '姓名'), 
+			'email' => array('n' => '邮箱'), 
+			'tel' => array('n' => '电话'), 
+			'created' => array('n' => '创建时间'), 
+		);
+	}
+	
+	/**
+	 * 编辑字段
+	 */
+	protected static function editFields()
+	{
+		return array(
+			array('name' => 'id', 'title' => 'ID', 'type' => 'input', 'itype' => 'hidden'),
+			array('name' => 'uid', 'title' => '用户名', 'type' => 'input', 'tip' => '6-16位数字、英文、下划线组成'),
+			array('name' => 'password', 'title' => '密码', 'type' => 'input', 'itype' => 'password'),
+			array('name' => 'password2', 'title' => '确认密码', 'type' => 'input', 'itype' => 'password'),
+			array('name' => 'name', 'title' => '姓名', 'type' => 'input'),
+			array('name' => 'email', 'title' => '邮箱', 'type' => 'input'),
+			array('name' => 'tel', 'title' => '电话', 'type' => 'input'),
+			array('name' => 'role_id', 'title' => '角色', 'type' => 'select'),
 		);
 	}
 	
@@ -29,7 +48,7 @@ Class AdminController extends BaseController
 	protected function listSearch()
 	{
 		if(parent::$input->post('sSearch')) {
-			$this->model->where('name', 'like', '%'.parent::$input->post('sSearch').'%');
+			$this->model->where('uid', '=', parent::$input->post('sSearch'));
 		}	
 	}
 	
@@ -40,12 +59,11 @@ Class AdminController extends BaseController
 	{
 		$this->model();	
 		$this->model->id = parent::$input->post('id');
-		$this->model->cate_id = parent::$input->post('cate_id');
-		$this->model->identifier = parent::$input->post('identifier');
-		$this->model->published = parent::$input->post('published');
-		$this->model->title = parent::$input->post('title');
-		$this->model->keyword = parent::$input->post('keyword');
-		$this->model->body = parent::$input->post('body');
+		$this->model->uid = parent::$input->post('uid');
+		$this->model->password = Security::password(parent::$input->post('password'));
+		$this->model->name = parent::$input->post('name');
+		$this->model->email = parent::$input->post('email');
+		$this->model->tel = parent::$input->post('tel');
 		$this->model->created = time();
 		$this->model->save();
 	}

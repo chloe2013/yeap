@@ -578,8 +578,7 @@ class ORM
 		{
 			$data[$column] = $this->data[$column];
 		}
-
-		if(isset($this->data[static::$key]))
+		if(!empty($this->data[static::$key]))
 		{
 			$this->update($data);
 		}
@@ -601,6 +600,10 @@ class ORM
 	 */
 	protected function insert(array $data)
 	{
+		if(isset($data[static::$key]))
+		{
+			unset($data[static::$key]);
+		}	
 		$id = static::$db->insert($this->table, $data);
 
 		$this->data[static::$key] = $id;
