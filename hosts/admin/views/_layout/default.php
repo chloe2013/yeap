@@ -358,6 +358,26 @@
 					</div><!-- #sidebar-shortcuts -->
 
 					<ul class="nav nav-list">
+						{@mmenu}
+						<li>
+							<a href="{.url}">
+								<i class="{.icon}"></i>
+								<span class="menu-text"> {.title} </span>
+							</a>
+							{?.c}
+								<ul class="submenu">
+								{@.c}
+									<li>
+										<a href="{..url}">
+											<i class="icon-double-angle-right"></i>
+											{..title}
+										</a>
+									</li>
+								{/}
+								</ul>
+							{/}
+						</li>
+						{/}
 						<li class="active">
 							<a href="index.html">
 								<i class="icon-dashboard"></i>

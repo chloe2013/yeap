@@ -46,6 +46,7 @@ Class BaseController extends Controller
 	 */
 	public function before()
 	{
+		var_dump($this->out_type);	
 		parent::before();
 		
 		// 后台菜单设置
@@ -57,12 +58,19 @@ Class BaseController extends Controller
 	 */
 	private function menu()
 	{
+			
 		if($this->out_type != 'view'){return;}
 		$menu = array(
-			array('title' => 'Article', 'url' => '/article', 'icon' => 'icon-align-justify'),
+			array('title' => 'Article', 'url' => '/article', 'icon' => 'icon-text-width'),
 			array('title' => 'Categroy', 'url' => '/categroy', 'icon' => 'icon-globe'),
 			array('title' => 'Banner', 'url' => '/banner', 'icon' => 'icon-picture'),
+			array('title' => 'Product', 'url' => '/product', 'icon' => 'icon-picture'),
+			array('title' => 'Message', 'url' => '/message', 'icon' => 'icon-picture'),
+			array('title' => 'Admin', 'url' => '/admin', 'icon' => 'icon-dashboard'),
+			array('title' => 'Role', 'url' => '/role', 'icon' => 'icon-picture'),
+			array('title' => 'Log', 'url' => '/log', 'icon' => 'icon-picture'),
 		);
+		
 		$this->assign('mmenu', $menu);
 	}
 	
