@@ -12,6 +12,7 @@
 	},
 	"require": {
         "php": ">=5.3.3",
+        "chrisboulton/php-resque": "1.2.x",
         "monolog/monolog": "1.*",
         "owasp/phprbac": "2.0.*@dev"
     },

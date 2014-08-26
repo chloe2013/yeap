@@ -20,10 +20,6 @@
 		<link rel="stylesheet" href="http://static.{config.domain}/css/datepicker.css" />
 		<link rel="stylesheet" href="http://static.{config.domain}/css/bootstrap-timepicker.css" />
 
-		<!-- fonts -->
-
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
-
 		<!-- ace styles -->
 
 		<link rel="stylesheet" href="http://static.{config.domain}/css/ace.min.css" />
@@ -666,7 +662,7 @@
 						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
 					</script>
 				</div>
-			
+
 			<div class="main-content">
 					<div class="breadcrumbs" id="breadcrumbs">
 						<script type="text/javascript">
@@ -699,20 +695,20 @@
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
-						
+
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-								
+
 								<form class="form-horizontal" role="form" method="post" >
-								{# view}	
+								{# view}
 								{@fields}
 									{?.itype == 'hidden'}
 									<input type="{.itype}" name="{.name}"/>
 									{:}
 									<div class="form-group">
 											<label class="col-sm-3 control-label no-padding-right" for="form-field-{.name}"> {.title} </label>
-	
+
 											<div class="col-sm-9">
 												{?.type == 'switch'}
 												<label>
@@ -722,7 +718,7 @@
 												{:.type == 'select'}
 												<select class="col-sm-5" name="{.name}" id="form-field-{.name}">
 													<option value="">&nbsp;</option>
-													
+
 												</select>
 												{:.type == 'textarea'}
 												<div class="wysiwyg-editor" id="editor{.name}"></div>
@@ -734,7 +730,7 @@
 												{/}
 											</div>
 										</div>
-	
+
 										<div class="space-4"></div>
 									{/}
 								{/}
@@ -816,16 +812,6 @@
 
 		<!--[if !IE]> -->
 
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<![endif]-->
-
-		<!--[if !IE]> -->
-
 		<script type="text/javascript">
 			window.jQuery || document.write("<script src='http://static.{config.domain}/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
 		</script>
@@ -862,7 +848,7 @@
 		<!-- ace scripts -->
 
 		<script src="http://static.{config.domain}/js/ace-elements.min.js"></script>
-		<script src="http://static.{config.domain}/js/ace.min.js"></script>	
-		<script src="http://static.{config.domain}/js/edit.js"></script>	
+		<script src="http://static.{config.domain}/js/ace.min.js"></script>
+		<script src="http://static.{config.domain}/js/edit.js"></script>
 	</body>
 </html>

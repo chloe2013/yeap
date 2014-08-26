@@ -6,9 +6,9 @@
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
-		
+
 		<!-- basic styles -->
-		
+
 		<link href="http://static.{config.domain}/css/bootstrap.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://static.{config.domain}/css/font-awesome.min.css" />
 
@@ -20,7 +20,7 @@
 
 		<!-- fonts -->
 
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+		<!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />-->
 
 		<!-- ace styles -->
 
@@ -713,9 +713,9 @@
 							</form>
 						</div><!-- #nav-search -->
 					</div>
-					
+
 					<div class="page-content">
-						
+
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
@@ -724,7 +724,7 @@
 										<div class="table-header">
 											Results for "Latest Registered Domains"
 										</div>
-										
+
 										<div class="table-responsive">
 											<table id="listsTable" class="table table-striped table-bordered table-hover">
 												<thead>
@@ -814,16 +814,6 @@
 		</div><!-- /.main-container -->
 
 		<!-- basic scripts -->
-
-		<!--[if !IE]> -->
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<![endif]-->
 
 		<!--[if !IE]> -->
 

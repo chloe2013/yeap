@@ -17,9 +17,6 @@
 
 		<!-- page specific plugin styles -->
 
-		<!-- fonts -->
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
-
 		<!-- ace styles -->
 		<link rel="stylesheet" href="http://static.{config.domain}/css/ace.min.css" />
 		<link rel="stylesheet" href="http://static.{config.domain}/css/ace-rtl.min.css" />
@@ -43,15 +40,8 @@
 			{# view}
 			</div>
 		</div><!--/.fluid-container-->
-		
-		<!-- basic scripts -->
-		<!--[if !IE]> -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<!-- <![endif]-->
 
-		<!--[if IE]>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<![endif]-->
+		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
