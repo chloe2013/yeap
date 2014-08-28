@@ -356,20 +356,7 @@
 					</div><!-- #sidebar-shortcuts -->
 
 					<ul class="nav nav-list">
-						<li class="active">
-							<a href="index.html">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> 控制台 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="typography.html">
-								<i class="icon-text-width"></i>
-								<span class="menu-text"> 文字排版 </span>
-							</a>
-						</li>
-
+						{mmenu}
 						<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
@@ -459,30 +446,6 @@
 							</ul>
 						</li>
 
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-list"></i>
-								<span class="menu-text"> 表格 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="tables.html">
-										<i class="icon-double-angle-right"></i>
-										简单 &amp; 动态
-									</a>
-								</li>
-
-								<li>
-									<a href="jqgrid.html">
-										<i class="icon-double-angle-right"></i>
-										jqGrid plugin
-									</a>
-								</li>
-							</ul>
-						</li>
 
 						<li class="active open">
 							<a href="#" class="dropdown-toggle">
@@ -524,13 +487,6 @@
 						</li>
 
 						<li>
-							<a href="widgets.html">
-								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 插件 </span>
-							</a>
-						</li>
-
-						<li>
 							<a href="calendar.html">
 								<i class="icon-calendar"></i>
 
@@ -543,65 +499,6 @@
 							</a>
 						</li>
 
-						<li>
-							<a href="gallery.html">
-								<i class="icon-picture"></i>
-								<span class="menu-text"> 相册 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-tag"></i>
-								<span class="menu-text"> 更多页面 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="profile.html">
-										<i class="icon-double-angle-right"></i>
-										用户信息
-									</a>
-								</li>
-
-								<li>
-									<a href="inbox.html">
-										<i class="icon-double-angle-right"></i>
-										收件箱
-									</a>
-								</li>
-
-								<li>
-									<a href="pricing.html">
-										<i class="icon-double-angle-right"></i>
-										售价单
-									</a>
-								</li>
-
-								<li>
-									<a href="invoice.html">
-										<i class="icon-double-angle-right"></i>
-										购物车
-									</a>
-								</li>
-
-								<li>
-									<a href="timeline.html">
-										<i class="icon-double-angle-right"></i>
-										时间轴
-									</a>
-								</li>
-
-								<li>
-									<a href="login.html">
-										<i class="icon-double-angle-right"></i>
-										登录 &amp; 注册
-									</a>
-								</li>
-							</ul>
-						</li>
 
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -701,7 +598,6 @@
 								<!-- PAGE CONTENT BEGINS -->
 
 								<form class="form-horizontal" role="form" method="post" >
-								{# view}
 								{@fields}
 									{?.itype == 'hidden'}
 									<input type="{.itype}" name="{.name}"/>

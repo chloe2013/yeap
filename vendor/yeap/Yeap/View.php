@@ -17,25 +17,25 @@ use \Exception;
 
 class View
 {
-	
+	const TPL_MODE = 'tpl';
 	/**
 	 * view template file
 	 * @var string
 	 */
 	private $view = '';
-	
+
 	/**
 	 * layout template file
 	 * @var string
 	 */
 	private $layout = '';
-	
+
 	/**
 	 * assign data for template
 	 * @var array
 	 */
 	private $assign = array();
-	
+
 	/**
 	 * tpl object
 	 * @var object
@@ -54,24 +54,54 @@ class View
 		$this->view = $file;
 		$this->assign = $data;
 		$this->layout = $layout;
-		
+
+		$m = self::TPL_MODE.'Init';
+		$this->$m();
+	}
+
+	private function tplInit()
+	{
 		$this->tpl = new Template();
 		$this->tpl->template_dir = VIEWPATH;
 		$this->tpl->compile_dir = CACHEPATH.'tpl_/_compile';
 		$this->tpl->cache_dir = CACHEPATH.'tpl_/_cache';
 	}
-	
+
 	/**
-	 * 设置模板
+	 * use tpl
 	 */
-	private function _print()
+	private function tplPrint()
 	{
 		$this->tpl->define('view', $this->view . EXT);
 		$this->tpl->define('layout', '_layout' . DS . $this->layout . EXT);
 		$this->tpl->assign($this->assign);
-		$this->tpl->assign('view', $this->tpl->fetch('view'));
+		$this->tpl->assign('view', file_exists($this->view . EXT) ? $this->tpl->fetch('view') : '');
 		print $this->tpl->fetch('layout');
 	}
+
+	/**
+	private function rawInit()
+	{
+	}
+
+	private function rawPrint()
+	{
+		include VIEWPATH.'_layout' . DS . $this->layout . EXT;
+	}
+
+	private function twigInit()
+	{
+		$loader = new \Twig_Loader_Filesystem(VIEWPATH);
+		$this->tpl = new \Twig_Environment($loader, array(
+		    'cache' => CACHEPATH.'twig_/_cache',
+		));
+	}
+
+	private function twigPrint()
+	{
+		print $this->tpl->render($this->view . EXT, $this->assign);
+	}
+	**/
 
 	/**
 	 * Return the view's HTML 不能抛出异常
@@ -83,7 +113,8 @@ class View
 		try {
 			ob_start();
 			extract((array) $this);
-			$this->_print();
+			$m = self::TPL_MODE.'Print';
+			$this->$m();
 			return ob_get_clean();
 		}
 		catch(Exception $e)
@@ -91,7 +122,7 @@ class View
 			return 'error:' . $e->getMessage();
 		}
 	}
-	
+
 }
 
 // END

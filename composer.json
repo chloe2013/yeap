@@ -2,12 +2,13 @@
 	"name": "yeap",
 	"description": "a mirco framework",
 	"autoload": {
-		"classmap": [
-			"classes"
-		],
+
 		"psr-0": {
 			"Yeap" : "vendor/yeap/",
-			"Tpl": "vendor/tpl/"
+			"Tpl": "vendor/tpl/",
+			"Model": "classes/",
+			"Helper": "classes/",
+			"Dao": "classes/"
 		}
 	},
 	"require": {

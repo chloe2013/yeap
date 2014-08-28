@@ -77,7 +77,7 @@ Class Base
 
 		    echo "Page rendered in <b>"
 		        . round((microtime(true) - START_TIME), 5) * 1000 ." ms</b>, taking <b>"
-		        . round((memory_get_usage() - START_MEMORY_USAGE) / 1024, 2) ." KB</b>";
+		        . round((memory_get_peak_usage()) / 1024, 2) ." KB</b>";
 		    $f = get_included_files();
 		    echo ", include files: ".count($f);
 

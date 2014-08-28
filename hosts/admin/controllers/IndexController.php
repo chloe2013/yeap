@@ -1,25 +1,29 @@
 <?php
-use Model\Admin;
 
 Class IndexController extends BaseController
 {
 	public function __construct()
 	{
-		parent::__construct();
+		parent::__construct('Article');
+		//$this->bread('首页', CPATH);
 	}
-	
-	/**	
-	 * 首页
+
+	/**
+	 * 列表字段
 	 */
-	public function index()
+	protected static function listsFields()
 	{
-		$this->title('test');	
-		$this->assign('content', 'hello world!');
-		
-		$admin = new Admin();
-		$lists = $admin->limit(10)->find();
+		return array(
+			'id' => array('n' => 'ID',),
+			'cate_id' => array('n' => '分类'),
+			'title' => array('n' => '标题'),
+			'identifier' => array('n' => '别名'),
+			'published' => array('n' => '状态'),
+			'modified' => array('n' => '更新时间'),
+			'created' => array('n' => '创建时间'),
+		);
 	}
-	
+
 }
 
 // End;

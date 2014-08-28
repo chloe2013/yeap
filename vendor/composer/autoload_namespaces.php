@@ -9,6 +9,10 @@ return array(
     'Yeap' => array($vendorDir . '/yeap'),
     'Tpl' => array($vendorDir . '/tpl'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'Resque' => array($vendorDir . '/chrisboulton/php-resque/lib'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
-    'PhpRbac' => array($vendorDir . '/rbac', $vendorDir . '/owasp/phprbac/PhpRbac/src'),
+    'PhpRbac' => array($vendorDir . '/owasp/phprbac/PhpRbac/src'),
+    'Model' => array($baseDir . '/classes'),
+    'Helper' => array($baseDir . '/classes'),
+    'Dao' => array($baseDir . '/classes'),
 );

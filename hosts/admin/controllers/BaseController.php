@@ -2,32 +2,36 @@
 
 use Yeap\Controller;
 use Yeap\Request;
-use Model\Auth;
+use Model\Permission;
 use Model\Admin;
+use Model\Common;
+use Model\Menu;
 
 Class BaseController extends Controller
 {
-	protected $model = null;	
+	protected $model = null;
 	public function __construct($m = null)
 	{
 		parent::__construct();
-		
+
 		// 连接数据库
 		$this->loadDb();
 		$this->model = $m;
-		
+
 		// 后台登录权限
-		
+
 		// 后台用户登录信息设置
 		$this->checkLogin();
+
+		//$p = new Permission();
+		//$p->addPerm('admin_article_index', 'view article');
 	}
-	
+
 	protected function model()
 	{
-		$m = $this->model;
-		$this->model = new $m();
+		$this->model = Common::dao($this->model);
 	}
-	
+
 	/**
 	 * 登录检查
 	 */
@@ -40,40 +44,28 @@ Class BaseController extends Controller
 			$this->jump('/login');
 		}
 	}
-	
+
 	/**
 	 * controller 之前做的事
 	 */
 	public function before()
 	{
-		var_dump($this->out_type);	
 		parent::before();
-		
+
 		// 后台菜单设置
 		$this->menu();
 	}
-	
+
 	/**
 	 * 菜单设置
 	 */
 	private function menu()
 	{
-			
 		if($this->out_type != 'view'){return;}
-		$menu = array(
-			array('title' => 'Article', 'url' => '/article', 'icon' => 'icon-text-width'),
-			array('title' => 'Categroy', 'url' => '/categroy', 'icon' => 'icon-globe'),
-			array('title' => 'Banner', 'url' => '/banner', 'icon' => 'icon-picture'),
-			array('title' => 'Product', 'url' => '/product', 'icon' => 'icon-picture'),
-			array('title' => 'Message', 'url' => '/message', 'icon' => 'icon-picture'),
-			array('title' => 'Admin', 'url' => '/admin', 'icon' => 'icon-dashboard'),
-			array('title' => 'Role', 'url' => '/role', 'icon' => 'icon-picture'),
-			array('title' => 'Log', 'url' => '/log', 'icon' => 'icon-picture'),
-		);
-		
-		$this->assign('mmenu', $menu);
+		$m = new Menu();
+		$this->assign('mmenu', $m->treeMenu());
 	}
-	
+
 	/**
 	 * 首页
 	 */
@@ -90,18 +82,17 @@ Class BaseController extends Controller
 		$this->assign('lists_fields', $aoColumns);
 		$this->assign('ajax_url', 'json');
 	}
-	
+
 	/**
 	 * 列表页 for datatables
 	 */
 	public function json()
 	{
 		$this->model();
-		
 		$start = (int)parent::$input->post('iDisplayStart');
 		$len = (int)parent::$input->post('iDisplayLength');
 		$page = ceil($start/$len);
-		
+
 		$this->model = $this->model->limit($start, $len);
 		$this->listSearch();
 		$this->model->field(array_keys(self::listsFields()));
@@ -115,38 +106,38 @@ Class BaseController extends Controller
 		);
 		exit(json_encode($data));
 	}
-	
+
 	/**
 	 * 编辑页
 	 */
 	public function edit($id = '')
 	{
 		$this->title('新增');
-		
-		if(parent::$input->isPost())	
+
+		if(parent::$input->isPost())
 		{
 			$this->editProc();
 			$this->jump(CPATH);
 		} else if($id) {
 			$this->title('编辑');
-			$this->model();	
+			$this->model();
 			$lists = $this->model->find($id);
 			$this->assign('data', $lists);
 		}
 		$this->assign('fields', $this->editFields());
 		$this->layout('form');
 	}
-	
+
 	/**
 	 * 编辑提交处理
 	 */
 	protected function editProc(){}
-	
+
 	/**
 	 * 列表过滤
 	 */
 	protected function listSearch(){}
-	
+
 	/**
 	 * 列表字段
 	 */
@@ -154,7 +145,7 @@ Class BaseController extends Controller
 	{
 		return array();
 	}
-	
+
 	/**
 	 * 编辑字段
 	 * array(n=>name, w=>width, f=>field, c=>class, s=>search)
@@ -163,7 +154,7 @@ Class BaseController extends Controller
 	{
 		return array();
 	}
-	
+
 }
 
 // End;

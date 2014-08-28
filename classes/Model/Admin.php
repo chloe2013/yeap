@@ -1,16 +1,15 @@
 <?php
 namespace Model;
 
-use Yeap\Model;
 use Yeap\Exception\YeapException;
 use Yeap\Security;
 use Yeap\Cookie;
+use Dao\Admin AS DAdmin;
 
-Class Admin extends Model{
-		
+Class Admin {
+
 	const LOGIN_COOKIE = 'XADMIN';
-	protected $table = 'admin';
-	
+
 	/**
 	 * 后台登陆
 	 * @param string $uid
@@ -19,7 +18,8 @@ Class Admin extends Model{
 	 */
 	public function login($uid, $pwd)
 	{
-		$user = $this->where('uid', $uid)->limit(1)->find();
+		$admin = new DAdmin();
+		$user = $admin->where('uid', $uid)->limit(1)->find();
 		if(!$user)
 		{
 			throw new YeapException('用户不存在');
@@ -28,14 +28,14 @@ Class Admin extends Model{
 		{
 			throw new YeapException('密码错误');
 		}
-		
+
 		// 记录状态 set cookie
 		$data = array(
-			'uid' => $uid, 
+			'uid' => $uid,
 		);
 		return Cookie::set(self::LOGIN_COOKIE, $data);
 	}
-	
+
 	/**
 	 * 是否登录
 	 * @return array $data
@@ -48,7 +48,7 @@ Class Admin extends Model{
 		}
 		return FALSE;
 	}
-	
+
 	/**
 	 * 退出登陆
 	 */

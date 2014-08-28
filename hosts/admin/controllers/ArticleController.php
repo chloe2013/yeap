@@ -4,26 +4,26 @@ Class ArticleController extends BaseController
 {
 	public function __construct()
 	{
-		parent::__construct('Model\Article');
+		parent::__construct('Article');
 		$this->bread('文章', CPATH);
 	}
-	
+
 	/**
 	 * 列表字段
 	 */
 	protected static function listsFields()
 	{
 		return array(
-			'id' => array('n' => 'ID',), 
-			'cate_id' => array('n' => '分类'), 
-			'title' => array('n' => '标题'), 
-			'identifier' => array('n' => '别名'),  
-			'published' => array('n' => '状态'), 
-			'modified' => array('n' => '更新时间'), 
-			'created' => array('n' => '创建时间'), 
+			'id' => array('n' => 'ID',),
+			'cate_id' => array('n' => '分类'),
+			'title' => array('n' => '标题'),
+			'identifier' => array('n' => '别名'),
+			'published' => array('n' => '状态'),
+			'modified' => array('n' => '更新时间'),
+			'created' => array('n' => '创建时间'),
 		);
 	}
-	
+
 	/**
 	 * 编辑字段
 	 */
@@ -38,7 +38,7 @@ Class ArticleController extends BaseController
 			array('name' => 'body', 'title' => '内容', 'type' => 'textarea'),
 		);
 	}
-	
+
 	/**
 	 * 搜索过滤
 	 */
@@ -46,9 +46,9 @@ Class ArticleController extends BaseController
 	{
 		if(parent::$input->post('sSearch')) {
 			$this->model->where('title', 'like', '%'.parent::$input->post('sSearch').'%');
-		}	
+		}
 	}
-	
+
 	/**
 	 * 编辑提交
 	 */
@@ -66,7 +66,7 @@ Class ArticleController extends BaseController
 		$article->modified = time();
 		$article->save();
 	}
-	
+
 }
 
 // End;

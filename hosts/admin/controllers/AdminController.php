@@ -6,25 +6,25 @@ Class AdminController extends BaseController
 {
 	public function __construct()
 	{
-		parent::__construct('Model\Admin');
+		parent::__construct('Admin');
 		$this->bread('管理员', CPATH);
 	}
-	
+
 	/**
 	 * 列表字段
 	 */
 	protected static function listsFields()
 	{
 		return array(
-			'id' => array('n' => 'ID'),  
-			'uid' => array('n' => '用户名'),  
-			'name' => array('n' => '姓名'), 
-			'email' => array('n' => '邮箱'), 
-			'tel' => array('n' => '电话'), 
-			'created' => array('n' => '创建时间'), 
+			'id' => array('n' => 'ID'),
+			'uid' => array('n' => '用户名'),
+			'name' => array('n' => '姓名'),
+			'email' => array('n' => '邮箱'),
+			'tel' => array('n' => '电话'),
+			'created' => array('n' => '创建时间'),
 		);
 	}
-	
+
 	/**
 	 * 编辑字段
 	 */
@@ -41,7 +41,7 @@ Class AdminController extends BaseController
 			array('name' => 'role_id', 'title' => '角色', 'type' => 'select'),
 		);
 	}
-	
+
 	/**
 	 * 搜索过滤
 	 */
@@ -49,15 +49,15 @@ Class AdminController extends BaseController
 	{
 		if(parent::$input->post('sSearch')) {
 			$this->model->where('uid', '=', parent::$input->post('sSearch'));
-		}	
+		}
 	}
-	
+
 	/**
 	 * 编辑提交
 	 */
 	protected function editProc()
 	{
-		$this->model();	
+		$this->model();
 		$this->model->id = parent::$input->post('id');
 		$this->model->uid = parent::$input->post('uid');
 		$this->model->password = Security::password(parent::$input->post('password'));
@@ -67,7 +67,7 @@ Class AdminController extends BaseController
 		$this->model->created = time();
 		$this->model->save();
 	}
-	
+
 }
 
 // End;
