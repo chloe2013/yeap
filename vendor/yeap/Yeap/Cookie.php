@@ -8,7 +8,7 @@ use Yeap\Security;
 Class Cookie
 {
 	private static $settings = array();
-	
+
 	/**
 	 * set default setting
 	 */
@@ -20,7 +20,7 @@ Class Cookie
 		}
 		return $config ? array_merge(self::$settings, $config) : self::$settings;
 	}
-	
+
 	/**
 	 * Decrypt and fetch cookie data
 	 *
@@ -28,9 +28,9 @@ Class Cookie
 	 * @param array $config settings
 	 * @return mixed
 	 */
-	public static function get($name, $config = array())
+	public static function &get($name, $config = array())
 	{
-		$config = self::init($config);	
+		$config = self::init($config);
 		$name = Config::get('cookie_prefix').$name;
 		if(isset($_COOKIE[$name]))
 		{
@@ -59,7 +59,7 @@ Class Cookie
 	 */
 	public static function set($name, $value = array(), $config = array())
 	{
-		$config = self::init($config);	
+		$config = self::init($config);
 		extract($config);
 		$value['last_update'] = time();
 		$name = Config::get('cookie_prefix').$name;

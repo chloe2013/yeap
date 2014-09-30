@@ -32,7 +32,7 @@ Class Base
 	 */
 	public function display()
 	{
-		self::debugStart();
+		//self::debugStart();
 
 		try {
 			// load controller namespaces
@@ -40,11 +40,8 @@ Class Base
 			$loader->add('', CTLPATH);
 			$loader->register();
 
-			// load config
-			$config = new Config('base');
-
 			// router url to controller
-			$router = new Router($config);
+			$router = new Router(new Config('base'));
 			$router->load();
 		}
 		catch (Exception $e) {
@@ -52,7 +49,7 @@ Class Base
 			echo $e->getMessage();die;
 		}
 
-		self::debugEnd();
+		//self::debugEnd();
 	}
 
 	/**

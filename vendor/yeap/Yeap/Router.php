@@ -109,7 +109,7 @@ Class Router
 		$controller->assign('path', $path);
 
 		// 方法之前处理
-		$controller->before();
+		//$controller->before();
 
 		// 调用controller 方法
 		if($this->param) {

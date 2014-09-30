@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
- * 
+ *
  */
 namespace Yeap;
 
 Class Config
 {
-	/**	
+	/**
 	 * 初始化一些配置项
 	 */
 	private static $setting = array(
@@ -16,7 +16,7 @@ Class Config
 		'router' => array(), // 路由配置信息
 		'defaultController' => 'Index',
 	);
-	
+
 	/**
 	 * 构造函数
 	 * @param string config file_name
@@ -27,7 +27,7 @@ Class Config
 			$this->load($file);
 		}
 	}
-	
+
 	/**
 	 * get by key
 	 */
@@ -35,45 +35,39 @@ Class Config
 	{
 		return self::get($key);
 	}
-	
+
 	/**
 	 * 加载配置文件
 	 * 默认从web目录 加载 没有就加载通用的
 	 */
 	public function load($file)
 	{
-		$config = array();
-		$configFile = 	'/config/' . $file . EXT;
-		
-		// load app config
-		if(is_file(PROJECTPATH . $configFile)) {
-			include(PROJECTPATH . $configFile);
-		}
-		
-		// load web config
-		if(is_file(WEBPATH . $configFile)) {
-			include(WEBPATH . $configFile);
-		}
-		
-		// 把配置内容赋值给本类
-		foreach($config as $k => $v)
+		$configFile = '/config/' . $file . EXT;
+
+		foreach(array(PROJECTPATH, WEBPATH) as $path)
 		{
-			self::$setting[$k] = $v;
+			if(is_file($path . $configFile)) {
+				foreach(include($path . $configFile) as $k => $v)
+				{
+					self::$setting[$k] = $v;
+				}
+			}
 		}
+
 		return $this;
 	}
-	
+
 	/**
 	 * get item
 	 */
-	public static function get($key)
+	public static function &get($key)
 	{
 		if(isset(self::$setting[$key])) {
 			return self::$setting[$key];
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * get all config items
 	 * @return array
@@ -82,7 +76,7 @@ Class Config
 	{
 		return self::$setting;
 	}
-	
+
 }
 
 // End;

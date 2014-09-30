@@ -1,4 +1,7 @@
 <?php
 
-$config['router'] = array();
-$config['defaultController'] = 'Index';
+return array(
+	'defaultController' => 'Index'
+);
+
+// END
