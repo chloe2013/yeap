@@ -4,10 +4,10 @@ Class IndexController extends BaseController
 {
 	public function __construct()
 	{
-		
+
 	}
-	
-	/**	
+
+	/**
 	 * 淘宝api处理
 	 * http://api.ta.amgbs.dev/token/fetchTbCode/TB02
 	 * localhost/?code=ssssfff&state=VEIwMg==
@@ -20,12 +20,12 @@ Class IndexController extends BaseController
 		{
 			$shop = urlencode(base64_decode($data['state']));
 			$code = $data['code'];
-			$url = "http://api.ta.amgbs.dev/token/fetchTbToken/{$shop}/{$code}";
+			$url = "http://api.ta.amgbs.dev/token/fetchToken/{$shop}/{$code}";
 			header('Location: '.$url);
 			exit;
 		}
 		$this->layout('blank');
 		$this->assign('content',  'hello world!');
 	}
-	
+
 }

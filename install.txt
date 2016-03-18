@@ -95,12 +95,12 @@ http://site.icu-project.org/download/51
 
 ## intl requried icu
 ## php install ##
-tar zxvf php-5.4.9.tar.gz 
+tar zxvf php-5.4.9.tar.gz
 cd php-5.4.9/
 ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv=/usr/local/libiconv --sysconfdir=/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-pdo-mysql=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysqld.sock --enable-intl
 
 cd ~/soft/php-5.3.19/
-./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv=/usr/local/libiconv --sysconfdir=/usr/local/php/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-pdo-mysql=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysqld.sock 
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv=/usr/local/libiconv --sysconfdir=/usr/local/php/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-pdo-mysql=/usr/local/mysql/bin/mysql_config --with-mysql-sock=/tmp/mysqld.sock
 
 ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-iconv=/usr/local/libiconv --sysconfdir=/etc --with-freetype-dir= --with-jpeg-dir --with-png-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --with-curlwrappers --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=yxq --with-fpm-group=yxq --enable-inline-optimization --disable-rpath --with-openssl --with-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-tidy --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd
 
@@ -118,7 +118,7 @@ apt-get install php-pear
 pear install PEAR
 
 ## libevent ##
-tar zxvf libevent-2.0.18-stable.tar.gz 
+tar zxvf libevent-2.0.18-stable.tar.gz
 cd libevent-2.0.18-stable/
 ./configure
 make && make install
@@ -144,7 +144,7 @@ tar zxvf memcached-2.1.0.tgz
 cd memcached-2.1.0
 /usr/local/php/bin/phpize
 ./configure --with-php-config=/usr/local/php/bin/php-config
-make 
+make
 make install
 
 ## vld ##
@@ -216,9 +216,9 @@ cd ./intl-3.0.0b1/
 make && make install
 
 ## xhprof ##
-wget http://pecl.php.net/get/xhprof-0.9.2.tgz
-tar -zxvf xhprof-0.9.2.tgz
-cd ./xhprof-0.9.2/extension/
+wget http://pecl.php.net/get/xhprof-0.9.4.tgz
+tar -zxvf xhprof-0.9.4.tgz
+cd ./xhprof-0.9.4/extension/
 /usr/local/php/bin/phpize
 ./configure --with-php-config=/usr/local/php/bin/php-config
 make && make install
@@ -254,25 +254,25 @@ webbench -c 500 -t 30 http://127.0.0.1/test.jpg
 
 ## gearmand depand boost
 ## boost
-wget http://cdnetworks-us-2.dl.sourceforge.net/project/boost/boost/1.53.0/boost_1_53_0.tar.gz  
-tar xvzf  boost_1_53_0.tar.gz  
-cd boost_1_53_0  
- ./bootstrap.sh --prefix=/usr/local/boost  
-bjam install  
-ln -s /usr/local/boost/include/boost/ /usr/local/include/boost  
+wget http://cdnetworks-us-2.dl.sourceforge.net/project/boost/boost/1.53.0/boost_1_53_0.tar.gz
+tar xvzf  boost_1_53_0.tar.gz
+cd boost_1_53_0
+ ./bootstrap.sh --prefix=/usr/local/boost
+bjam install
+ln -s /usr/local/boost/include/boost/ /usr/local/include/boost
 ln -s /usr/local/boost/lib/libboost_program_options.so  /usr/lib/libboost_program_options.so
 sudo apt-get install libev-libevent-dev uuid-dev
 
-wget https://launchpad.net/gearmand/trunk/1.1.5/+download/gearmand-1.1.5.tar.gz  
-tar -zxvf gearmand-1.1.5.tar.gz  
-cd gearmand-1.1.5 
-./configure --prefix=/usr/local/gearmand 
+wget https://launchpad.net/gearmand/trunk/1.1.5/+download/gearmand-1.1.5.tar.gz
+tar -zxvf gearmand-1.1.5.tar.gz
+cd gearmand-1.1.5
+./configure --prefix=/usr/local/gearmand
 make && make install
 
 ## php gearman
-wget http://pecl.php.net/get/gearman-1.0.2.tgz  
-tar -zxvf gearman-1.0.2.tgz  
-cd gearman-1.0.2  
+wget http://pecl.php.net/get/gearman-1.0.2.tgz
+tar -zxvf gearman-1.0.2.tgz
+cd gearman-1.0.2
 /usr/local/php/bin/phpize
 ./configure --with-php-config=/usr/local/php/bin/php-config
 make && make install
@@ -398,9 +398,9 @@ datadir=/usr/local/mysql/data
 cd /usr/local/mysql ; /usr/local/mysql/bin/mysqld_safe &
 cd /usr/local/mysql/mysql-test ; perl mysql-test-run.pl
 ps -ef | grep mysql
-kill -9 
+kill -9
 /usr/local/mysql/bin/mysqladmin -u root -p shutdown
-show variables like '%version%' 
+show variables like '%version%'
 select version();
 
 ######################################################################################
@@ -408,43 +408,43 @@ select version();
 ######################################################################################
 #! /bin/sh
 case $# in
-0) 
-    echo "-----------------------------------------------------------------------------" 
-    echo "[USAGE]" 
-    echo "   ./nginx.sh [start|stop|restart]" 
-    echo "-----------------------------------------------------------------------------" 
+0)
+    echo "-----------------------------------------------------------------------------"
+    echo "[USAGE]"
+    echo "   ./nginx.sh [start|stop|restart]"
+    echo "-----------------------------------------------------------------------------"
 ;;
 1)
     if [ $1 = "start" ]
     then
-        echo "Starting nginx server..." 
+        echo "Starting nginx server..."
         /usr/local/nginx/sbin/nginx > /dev/null 2>&1
-        #/usr/local/php/sbin/php-fpm start 
-		/etc/init.d/php-fpm start 
+        #/usr/local/php/sbin/php-fpm start
+		/etc/init.d/php-fpm start
     elif [ $1 = "stop" ]
     then
-        echo "Stopping nginx server..." 
+        echo "Stopping nginx server..."
         /usr/local/nginx/sbin/nginx -s stop > /dev/null 2>&1
-        #/usr/local/php/sbin/php-fpm stop 
+        #/usr/local/php/sbin/php-fpm stop
 		/etc/init.d/php-fpm stop
     elif [ $1 = "restart" ]
     then
-        echo "Restarting nginx server..."        
+        echo "Restarting nginx server..."
         /usr/local/nginx/sbin/nginx -s reload > /dev/null 2>&1
-        #/usr/local/php/sbin/php-fpm restart 
+        #/usr/local/php/sbin/php-fpm restart
 		/etc/init.d/php-fpm restart
     else
-        echo "-----------------------------------------------------------------------------" 
-        echo "[USAGE]" 
-        echo "   ./nginx.sh [start|stop|restart]" 
-        echo "-----------------------------------------------------------------------------" 
+        echo "-----------------------------------------------------------------------------"
+        echo "[USAGE]"
+        echo "   ./nginx.sh [start|stop|restart]"
+        echo "-----------------------------------------------------------------------------"
     fi
 ;;
 *)
-    echo "-----------------------------------------------------------------------------" 
-    echo "[USAGE]" 
-    echo "   ./nginx.sh [start|stop|restart]" 
-    echo "-----------------------------------------------------------------------------" 
+    echo "-----------------------------------------------------------------------------"
+    echo "[USAGE]"
+    echo "   ./nginx.sh [start|stop|restart]"
+    echo "-----------------------------------------------------------------------------"
 ;;
 esac
 ######################################################################################
@@ -467,14 +467,14 @@ tar zxf yaml-0.1.4.tar.gz
 cd yaml-0.1.4
 ./configure -prefix=/usr/local/libyaml
 make
-make install 
+make install
 
 ## ruby install
 wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p374.tar.gz
 tar xzvf ruby-1.9.3-p374.tar.gz
 cd ruby-1.9.3-p374
 ./configure -prefix=/usr/local/ruby --enable-shared --disable-install-doc --with-opt-dir=/usr/local/lib
-make && make install 
+make && make install
 
 浏览所有的configure参数
 ./configure -help |more
@@ -485,14 +485,14 @@ rubygems是ruby的在线包管理工具
 wget http://rubyforge.org/frs/download.php/76729/rubygems-1.8.25.tgz
 tar xzvf rubygems-1.8.25.tgz
 cd rubygems-1.8.25/
-ruby setup.rb 
+ruby setup.rb
 
 ## rail install
 gem sources -a http://ruby.taobao.org/
 gem sources --remove http://rubygems.org/
 gem sources -l
 gem install rails -v
-rails -v 
+rails -v
 rails new /home/ruby/blog --database=mysql
 
 ## 安装C版本的数据库适配器
@@ -500,7 +500,7 @@ http://www.tmtm.org/en/mysql/ruby/
 tar xzvf mysql-ruby-2.8.2.tar.gz
 cd mysql-ruby-2.8.2
 ruby extconf.rb --with-mysql-dir=/usr/local/mysql
-make && make install 
+make && make install
 
 http://www.fastcgi.com/dist/
 tar xzvf fcgi-2.4.0.tar.gz
@@ -513,16 +513,61 @@ tar xzvf ruby-fcgi-0.8.7.tar.gz
 cd ruby-fcgi-0.8.7
 ruby install.rb config -- --with-fcgi-include=/usr/local/fcgi/include --with-fcgi-lib=/usr/local/fcgi/lib
 ruby install.rb setup
-ruby install.rb install 
+ruby install.rb install
 
 ## 然后下载lighttpd：
 http://www.lighttpd.net/download/
 tar xzvf lighttpd-1.4.13.tar.gz
 cd lighttpd-1.4.13
-./configure --prefix=/usr/local/lighttpd 
-make && make install 
+./configure --prefix=/usr/local/lighttpd
+make && make install
 
 ## 编译后配置：
 cp doc/sysconfig.lighttpd /etc/sysconfig/lighttpd
 mkdir /etc/lighttpd
-cp doc/lighttpd.conf /etc/lighttpd/lighttpd.conf 
+cp doc/lighttpd.conf /etc/lighttpd/lighttpd.conf
+
+==================================================================================================
+mkdir /home/soft
+
+## tengine
+cd /home/soft
+wget http://tengine.taobao.org/download/tengine-2.1.2.tar.gz
+tar xzvf tengine-2.1.2.tar.gz
+cd tengine-2.1.2
+./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_gzip_static_module --with-http_concat_module
+make
+make install
+cd /usr/local/nginx/conf
+cp -f nginx.conf.default nginx.conf
+
+## php7
+cd /home/soft
+wget http://cn2.php.net/get/php-7.0.2.tar.gz/from/this/mirror -O php-7.0.2.tar.gz
+tar xzvf php-7.0.2.tar.gz
+cd php-7.0.2
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-iconv --with-jpeg-dir --with-png-dir --with-freetype-dir --with-zlib --enable-zip --with-libxml-dir=/usr --with-gd --with-mcrypt --with-curl --enable-xml --enable-mbstring --enable-bcmath --enable-shmop --enable-mbregex --enable-gd-native-ttf --enable-sysvsem --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-inline-optimization --disable-rpath --with-openssl --without-pear --disable-debug --enable-sockets --with-bz2 --with-xsl --with-pcre-regex --enable-ftp --enable-exif --with-mhash --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --enable-pcntl --enable-opcache
+make
+make install
+
+## config
+cp -f php.ini-development /usr/local/php/etc/php.ini
+cp -f sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+chmod +x /etc/init.d/php-fpm
+cd /usr/local/php/etc
+cp php-fpm.conf.default php-pm.conf
+cp php-fpm.d/www.conf.default php-fpm.d/www.conf
+# php.ini opcache/timezone
+sed -i 's|;openssl.capath=|;openssl.capath=\n\nzend_extension = /usr/local/php/lib/php/extensions/no-debug-non-zts-20151012/opcache.so|g' /usr/local/php/etc/php.ini
+sed -i 's|;date.timezone =|date.timezone = Asia/Shanghai|g' /usr/local/php/etc/php.ini
+
+/etc/init.d/php-fpm start
+
+## composer
+cd /home/soft
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+
+
+

@@ -75,7 +75,7 @@ class View
 		$this->tpl->define('view', $this->view . EXT);
 		$this->tpl->define('layout', '_layout' . DS . $this->layout . EXT);
 		$this->tpl->assign($this->assign);
-		$this->tpl->assign('view', file_exists($this->view . EXT) ? $this->tpl->fetch('view') : '');
+		$this->tpl->assign('view', is_file($this->view . EXT) ? $this->tpl->fetch('view') : '');
 		print $this->tpl->fetch('layout');
 	}
 

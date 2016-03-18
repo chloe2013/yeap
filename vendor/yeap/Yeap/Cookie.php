@@ -28,7 +28,7 @@ Class Cookie
 	 * @param array $config settings
 	 * @return mixed
 	 */
-	public static function &get($name, $config = array())
+	public static function get($name, $config = array())
 	{
 		$config = self::init($config);
 		$name = Config::get('cookie_prefix').$name;

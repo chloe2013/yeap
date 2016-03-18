@@ -60,7 +60,7 @@ Class Config
 	/**
 	 * get item
 	 */
-	public static function &get($key)
+	public static function get($key)
 	{
 		if(isset(self::$setting[$key])) {
 			return self::$setting[$key];
